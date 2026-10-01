@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -14,6 +15,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -122,6 +125,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const path = useRouterState({ select: (st) => st.location.pathname });
+  const isPanel = path.startsWith("/dashboard") || path.startsWith("/admin");
+
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+      else queryClient.clear();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -133,11 +149,12 @@ function RootComponent() {
           <div className="absolute bottom-0 left-1/3 size-[460px] rounded-full bg-fuchsia-500/15 blur-[150px]" />
         </div>
         <div className="relative z-10">
-          <SiteHeader />
+          {!isPanel && <SiteHeader />}
           <Outlet />
-          <SiteFooter />
+          {!isPanel && <SiteFooter />}
         </div>
       </div>
+      <Toaster theme="dark" position="top-right" richColors />
     </QueryClientProvider>
   );
 }

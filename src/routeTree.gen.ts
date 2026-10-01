@@ -10,15 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminAnnouncementsRouteImport } from './routes/_authenticated/admin.announcements'
+import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin.clients'
+import { Route as AuthenticatedAdminLogsRouteImport } from './routes/_authenticated/admin.logs'
+import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
+import { Route as AuthenticatedAdminPlansRouteImport } from './routes/_authenticated/admin.plans'
+import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
+import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedAdminTicketsRouteImport } from './routes/_authenticated/admin.tickets'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardInvoicesRouteImport } from './routes/_authenticated/dashboard.invoices'
+import { Route as AuthenticatedDashboardOrderRouteImport } from './routes/_authenticated/dashboard.order'
+import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
+import { Route as AuthenticatedDashboardServicesRouteImport } from './routes/_authenticated/dashboard.services'
+import { Route as AuthenticatedDashboardTicketsRouteImport } from './routes/_authenticated/dashboard.tickets'
+import { Route as AuthenticatedDashboardWalletRouteImport } from './routes/_authenticated/dashboard.wallet'
+import { Route as AuthenticatedAdminClientsIdRouteImport } from './routes/_authenticated/admin.clients.$id'
+import { Route as AuthenticatedAdminTicketsIdRouteImport } from './routes/_authenticated/admin.tickets.$id'
+import { Route as AuthenticatedDashboardTicketsIdRouteImport } from './routes/_authenticated/dashboard.tickets.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -29,6 +57,11 @@ const FaqRoute = FaqRouteImport.update({
 const FeaturesRoute = FeaturesRouteImport.update({
   id: '/features',
   path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -46,54 +79,331 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminAnnouncementsRoute =
+  AuthenticatedAdminAnnouncementsRouteImport.update({
+    id: '/announcements',
+    path: '/announcements',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminClientsRoute =
+  AuthenticatedAdminClientsRouteImport.update({
+    id: '/clients',
+    path: '/clients',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminLogsRoute = AuthenticatedAdminLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminOrdersRoute =
+  AuthenticatedAdminOrdersRouteImport.update({
+    id: '/orders',
+    path: '/orders',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPlansRoute = AuthenticatedAdminPlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminServicesRoute =
+  AuthenticatedAdminServicesRouteImport.update({
+    id: '/services',
+    path: '/services',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSettingsRoute =
+  AuthenticatedAdminSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTicketsRoute =
+  AuthenticatedAdminTicketsRouteImport.update({
+    id: '/tickets',
+    path: '/tickets',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardInvoicesRoute =
+  AuthenticatedDashboardInvoicesRouteImport.update({
+    id: '/invoices',
+    path: '/invoices',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardOrderRoute =
+  AuthenticatedDashboardOrderRouteImport.update({
+    id: '/order',
+    path: '/order',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardProfileRoute =
+  AuthenticatedDashboardProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardServicesRoute =
+  AuthenticatedDashboardServicesRouteImport.update({
+    id: '/services',
+    path: '/services',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardTicketsRoute =
+  AuthenticatedDashboardTicketsRouteImport.update({
+    id: '/tickets',
+    path: '/tickets',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardWalletRoute =
+  AuthenticatedDashboardWalletRouteImport.update({
+    id: '/wallet',
+    path: '/wallet',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedAdminClientsIdRoute =
+  AuthenticatedAdminClientsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAdminClientsRoute,
+  } as any)
+const AuthenticatedAdminTicketsIdRoute =
+  AuthenticatedAdminTicketsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedAdminTicketsRoute,
+  } as any)
+const AuthenticatedDashboardTicketsIdRoute =
+  AuthenticatedDashboardTicketsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardTicketsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/services': typeof AuthenticatedAdminServicesRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
+  '/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
+  '/dashboard/order': typeof AuthenticatedDashboardOrderRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/services': typeof AuthenticatedDashboardServicesRoute
+  '/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
+  '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
+  '/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/services': typeof AuthenticatedAdminServicesRoute
+  '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
+  '/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
+  '/dashboard/order': typeof AuthenticatedDashboardOrderRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/services': typeof AuthenticatedDashboardServicesRoute
+  '/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
+  '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
+  '/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/_authenticated/admin/announcements': typeof AuthenticatedAdminAnnouncementsRoute
+  '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/_authenticated/admin/logs': typeof AuthenticatedAdminLogsRoute
+  '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
+  '/_authenticated/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
+  '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
+  '/_authenticated/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
+  '/_authenticated/dashboard/order': typeof AuthenticatedDashboardOrderRoute
+  '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/services': typeof AuthenticatedDashboardServicesRoute
+  '/_authenticated/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
+  '/_authenticated/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
+  '/_authenticated/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/_authenticated/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faq' | '/features' | '/login' | '/pricing' | '/register'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faq' | '/features' | '/login' | '/pricing' | '/register'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
     | '/faq'
     | '/features'
+    | '/forgot-password'
     | '/login'
     | '/pricing'
     | '/register'
+    | '/reset-password'
+    | '/admin'
+    | '/dashboard'
+    | '/admin/announcements'
+    | '/admin/clients'
+    | '/admin/logs'
+    | '/admin/orders'
+    | '/admin/plans'
+    | '/admin/services'
+    | '/admin/settings'
+    | '/admin/tickets'
+    | '/dashboard/invoices'
+    | '/dashboard/order'
+    | '/dashboard/profile'
+    | '/dashboard/services'
+    | '/dashboard/tickets'
+    | '/dashboard/wallet'
+    | '/admin/'
+    | '/dashboard/'
+    | '/admin/clients/$id'
+    | '/admin/tickets/$id'
+    | '/dashboard/tickets/$id'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/faq'
+    | '/features'
+    | '/forgot-password'
+    | '/login'
+    | '/pricing'
+    | '/register'
+    | '/reset-password'
+    | '/admin/announcements'
+    | '/admin/clients'
+    | '/admin/logs'
+    | '/admin/orders'
+    | '/admin/plans'
+    | '/admin/services'
+    | '/admin/settings'
+    | '/admin/tickets'
+    | '/dashboard/invoices'
+    | '/dashboard/order'
+    | '/dashboard/profile'
+    | '/dashboard/services'
+    | '/dashboard/tickets'
+    | '/dashboard/wallet'
+    | '/admin'
+    | '/dashboard'
+    | '/admin/clients/$id'
+    | '/admin/tickets/$id'
+    | '/dashboard/tickets/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/faq'
+    | '/features'
+    | '/forgot-password'
+    | '/login'
+    | '/pricing'
+    | '/register'
+    | '/reset-password'
+    | '/_authenticated/admin'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/admin/announcements'
+    | '/_authenticated/admin/clients'
+    | '/_authenticated/admin/logs'
+    | '/_authenticated/admin/orders'
+    | '/_authenticated/admin/plans'
+    | '/_authenticated/admin/services'
+    | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/tickets'
+    | '/_authenticated/dashboard/invoices'
+    | '/_authenticated/dashboard/order'
+    | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/services'
+    | '/_authenticated/dashboard/tickets'
+    | '/_authenticated/dashboard/wallet'
+    | '/_authenticated/admin/'
+    | '/_authenticated/dashboard/'
+    | '/_authenticated/admin/clients/$id'
+    | '/_authenticated/admin/tickets/$id'
+    | '/_authenticated/dashboard/tickets/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -103,6 +413,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -117,6 +434,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features'
       preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -140,16 +464,282 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/announcements': {
+      id: '/_authenticated/admin/announcements'
+      path: '/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AuthenticatedAdminAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/clients': {
+      id: '/_authenticated/admin/clients'
+      path: '/clients'
+      fullPath: '/admin/clients'
+      preLoaderRoute: typeof AuthenticatedAdminClientsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/logs': {
+      id: '/_authenticated/admin/logs'
+      path: '/logs'
+      fullPath: '/admin/logs'
+      preLoaderRoute: typeof AuthenticatedAdminLogsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/orders': {
+      id: '/_authenticated/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/plans': {
+      id: '/_authenticated/admin/plans'
+      path: '/plans'
+      fullPath: '/admin/plans'
+      preLoaderRoute: typeof AuthenticatedAdminPlansRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/services': {
+      id: '/_authenticated/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AuthenticatedAdminServicesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/settings': {
+      id: '/_authenticated/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/tickets': {
+      id: '/_authenticated/admin/tickets'
+      path: '/tickets'
+      fullPath: '/admin/tickets'
+      preLoaderRoute: typeof AuthenticatedAdminTicketsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/invoices': {
+      id: '/_authenticated/dashboard/invoices'
+      path: '/invoices'
+      fullPath: '/dashboard/invoices'
+      preLoaderRoute: typeof AuthenticatedDashboardInvoicesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/order': {
+      id: '/_authenticated/dashboard/order'
+      path: '/order'
+      fullPath: '/dashboard/order'
+      preLoaderRoute: typeof AuthenticatedDashboardOrderRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/profile': {
+      id: '/_authenticated/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/services': {
+      id: '/_authenticated/dashboard/services'
+      path: '/services'
+      fullPath: '/dashboard/services'
+      preLoaderRoute: typeof AuthenticatedDashboardServicesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/tickets': {
+      id: '/_authenticated/dashboard/tickets'
+      path: '/tickets'
+      fullPath: '/dashboard/tickets'
+      preLoaderRoute: typeof AuthenticatedDashboardTicketsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/wallet': {
+      id: '/_authenticated/dashboard/wallet'
+      path: '/wallet'
+      fullPath: '/dashboard/wallet'
+      preLoaderRoute: typeof AuthenticatedDashboardWalletRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/admin/clients/$id': {
+      id: '/_authenticated/admin/clients/$id'
+      path: '/$id'
+      fullPath: '/admin/clients/$id'
+      preLoaderRoute: typeof AuthenticatedAdminClientsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminClientsRoute
+    }
+    '/_authenticated/admin/tickets/$id': {
+      id: '/_authenticated/admin/tickets/$id'
+      path: '/$id'
+      fullPath: '/admin/tickets/$id'
+      preLoaderRoute: typeof AuthenticatedAdminTicketsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminTicketsRoute
+    }
+    '/_authenticated/dashboard/tickets/$id': {
+      id: '/_authenticated/dashboard/tickets/$id'
+      path: '/$id'
+      fullPath: '/dashboard/tickets/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardTicketsIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardTicketsRoute
+    }
   }
 }
 
+interface AuthenticatedAdminClientsRouteChildren {
+  AuthenticatedAdminClientsIdRoute: typeof AuthenticatedAdminClientsIdRoute
+}
+
+const AuthenticatedAdminClientsRouteChildren: AuthenticatedAdminClientsRouteChildren =
+  {
+    AuthenticatedAdminClientsIdRoute: AuthenticatedAdminClientsIdRoute,
+  }
+
+const AuthenticatedAdminClientsRouteWithChildren =
+  AuthenticatedAdminClientsRoute._addFileChildren(
+    AuthenticatedAdminClientsRouteChildren,
+  )
+
+interface AuthenticatedAdminTicketsRouteChildren {
+  AuthenticatedAdminTicketsIdRoute: typeof AuthenticatedAdminTicketsIdRoute
+}
+
+const AuthenticatedAdminTicketsRouteChildren: AuthenticatedAdminTicketsRouteChildren =
+  {
+    AuthenticatedAdminTicketsIdRoute: AuthenticatedAdminTicketsIdRoute,
+  }
+
+const AuthenticatedAdminTicketsRouteWithChildren =
+  AuthenticatedAdminTicketsRoute._addFileChildren(
+    AuthenticatedAdminTicketsRouteChildren,
+  )
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAnnouncementsRoute: typeof AuthenticatedAdminAnnouncementsRoute
+  AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRouteWithChildren
+  AuthenticatedAdminLogsRoute: typeof AuthenticatedAdminLogsRoute
+  AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
+  AuthenticatedAdminPlansRoute: typeof AuthenticatedAdminPlansRoute
+  AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
+  AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminTicketsRoute: typeof AuthenticatedAdminTicketsRouteWithChildren
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAnnouncementsRoute: AuthenticatedAdminAnnouncementsRoute,
+  AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRouteWithChildren,
+  AuthenticatedAdminLogsRoute: AuthenticatedAdminLogsRoute,
+  AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
+  AuthenticatedAdminPlansRoute: AuthenticatedAdminPlansRoute,
+  AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
+  AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminTicketsRoute: AuthenticatedAdminTicketsRouteWithChildren,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedDashboardTicketsRouteChildren {
+  AuthenticatedDashboardTicketsIdRoute: typeof AuthenticatedDashboardTicketsIdRoute
+}
+
+const AuthenticatedDashboardTicketsRouteChildren: AuthenticatedDashboardTicketsRouteChildren =
+  {
+    AuthenticatedDashboardTicketsIdRoute: AuthenticatedDashboardTicketsIdRoute,
+  }
+
+const AuthenticatedDashboardTicketsRouteWithChildren =
+  AuthenticatedDashboardTicketsRoute._addFileChildren(
+    AuthenticatedDashboardTicketsRouteChildren,
+  )
+
+interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardInvoicesRoute: typeof AuthenticatedDashboardInvoicesRoute
+  AuthenticatedDashboardOrderRoute: typeof AuthenticatedDashboardOrderRoute
+  AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardServicesRoute: typeof AuthenticatedDashboardServicesRoute
+  AuthenticatedDashboardTicketsRoute: typeof AuthenticatedDashboardTicketsRouteWithChildren
+  AuthenticatedDashboardWalletRoute: typeof AuthenticatedDashboardWalletRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+}
+
+const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
+  {
+    AuthenticatedDashboardInvoicesRoute: AuthenticatedDashboardInvoicesRoute,
+    AuthenticatedDashboardOrderRoute: AuthenticatedDashboardOrderRoute,
+    AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+    AuthenticatedDashboardServicesRoute: AuthenticatedDashboardServicesRoute,
+    AuthenticatedDashboardTicketsRoute:
+      AuthenticatedDashboardTicketsRouteWithChildren,
+    AuthenticatedDashboardWalletRoute: AuthenticatedDashboardWalletRoute,
+    AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  }
+
+const AuthenticatedDashboardRouteWithChildren =
+  AuthenticatedDashboardRoute._addFileChildren(
+    AuthenticatedDashboardRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

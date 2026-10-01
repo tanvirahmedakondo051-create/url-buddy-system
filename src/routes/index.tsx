@@ -1,3 +1,4 @@
+import { PlanGrid } from "@/components/PlanGrid";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Terminal,
@@ -249,75 +250,10 @@ function HomePage() {
             to="/pricing"
             className="text-sm font-medium text-cyan transition hover:text-white"
           >
-            View all 8 plans →
+            View all plans →
           </Link>
         </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {/* Mini */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-            <div className="text-sm font-medium text-slate-400">Mini</div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="font-display text-4xl font-bold text-white">৳100</span>
-              <span className="text-slate-500">/mo</span>
-            </div>
-            <p className="mt-1 text-xs text-slate-500">Best for first bots &amp; side projects</p>
-            <ul className="mt-5 space-y-2.5 text-sm text-slate-300">
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 512MB RAM</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 2GB storage</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 50% CPU allotment</li>
-            </ul>
-            <Link
-              to="/pricing"
-              className="mt-6 block rounded-xl border border-white/15 bg-white/5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              Choose Mini
-            </Link>
-          </div>
-          {/* Pro featured */}
-          <div className="relative rounded-2xl border border-brand/40 bg-gradient-to-b from-brand/15 to-white/5 p-6 shadow-xl shadow-brand/20 backdrop-blur-xl">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-brand to-cyan px-3 py-1 text-[11px] font-semibold text-white">
-              Most popular
-            </div>
-            <div className="text-sm font-medium text-brand">Pro</div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="font-display text-4xl font-bold text-white">৳350</span>
-              <span className="text-slate-400">/mo</span>
-            </div>
-            <p className="mt-1 text-xs text-slate-400">For growing bots that need reach</p>
-            <ul className="mt-5 space-y-2.5 text-sm text-slate-200">
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 2GB RAM</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 10GB storage</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 100% CPU allotment</li>
-              <li className="flex gap-2"><Check className="size-4 text-cyan" /> Custom domain + static IP</li>
-            </ul>
-            <Link
-              to="/pricing"
-              className="mt-6 block rounded-xl bg-gradient-to-r from-brand to-cyan py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-brand/30 transition hover:shadow-brand/50"
-            >
-              Choose Pro
-            </Link>
-          </div>
-          {/* Mega */}
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-            <div className="text-sm font-medium text-slate-400">Mega</div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="font-display text-4xl font-bold text-white">৳850</span>
-              <span className="text-slate-500">/mo</span>
-            </div>
-            <p className="mt-1 text-xs text-slate-500">Heavy workloads &amp; production fleets</p>
-            <ul className="mt-5 space-y-2.5 text-sm text-slate-300">
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 6GB RAM</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 60GB storage</li>
-              <li className="flex gap-2"><Check className="size-4 text-mint" /> 400% CPU allotment</li>
-            </ul>
-            <Link
-              to="/pricing"
-              className="mt-6 block rounded-xl border border-white/15 bg-white/5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-white/10"
-            >
-              Choose Mega
-            </Link>
-          </div>
-        </div>
+        <div className="mt-8"><PlanGrid limit={3} /></div>
       </section>
 
       {/* EVERY PLAN INCLUDES */}

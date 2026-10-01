@@ -13,7 +13,7 @@ export function TicketThread({ ticketId, userId, staff }: { ticketId: string; us
     queryKey: ["ticket", ticketId],
     queryFn: async () => {
       const [t, m] = await Promise.all([
-        supabase.from("tickets").select("*, profiles:user_id(full_name,email)").eq("id", ticketId).single(),
+        supabase.from("tickets").select("*, profiles(full_name,email)").eq("id", ticketId).single(),
         supabase.from("ticket_messages").select("*").eq("ticket_id", ticketId).order("created_at"),
       ]);
       if (t.error) throw t.error;

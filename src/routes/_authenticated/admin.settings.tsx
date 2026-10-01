@@ -121,6 +121,14 @@ function SettingsPage() {
         </Panel>
 
         <Panel className="p-6">
+          <h2 className="mb-1 font-display font-semibold text-white">Email</h2>
+          <p className="mb-4 text-sm text-slate-400">When on, new customers must click the link in their email before they can sign in.</p>
+          <label className="flex items-center gap-2 text-sm text-slate-300">
+            <input type="checkbox" checked={(v["email_verification"] ?? "1") === "1"} onChange={(e) => setV({ ...v, email_verification: e.target.checked ? "1" : "0" })} /> Require email verification on signup
+          </label>
+        </Panel>
+
+        <Panel className="p-6">
           <h2 className="mb-1 font-display font-semibold text-white">Payment gateways</h2>
           <p className="mb-4 text-sm text-slate-400">Turn payment methods on or off at checkout.</p>
           <div className="flex flex-wrap gap-5 text-sm text-slate-300">

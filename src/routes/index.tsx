@@ -157,7 +157,7 @@ function HomePage() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               to="/pricing"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-cyan px-6 py-3.5 font-semibold text-white shadow-xl shadow-brand/30 transition hover:shadow-brand/50"
+              className="btn-shine group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-cyan px-6 py-3.5 font-semibold text-white shadow-xl shadow-brand/30 transition hover:shadow-brand/50"
             >
               Start from ৳100/mo
               <span className="transition group-hover:translate-x-0.5">→</span>
@@ -316,7 +316,7 @@ function HomePage() {
           </p>
           <Link
             to="/register"
-            className="relative mt-7 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-cyan px-7 py-3.5 font-semibold text-white shadow-xl shadow-brand/30 transition hover:shadow-brand/50"
+            className="btn-shine relative mt-7 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand to-cyan px-7 py-3.5 font-semibold text-white shadow-xl shadow-brand/30 transition hover:shadow-brand/50"
           >
             Start from ৳100/mo →
           </Link>

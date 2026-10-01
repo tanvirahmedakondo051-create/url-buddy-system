@@ -19,3 +19,6 @@
 - Admin uses `AdminShell` (WHMCS-style top menu + shortcuts column); client area keeps `PanelShell`. Why: matches WHMCS admin layout.
 - Overdue services are suspended by a daily pg_cron job calling `suspend_overdue()`. Why: no external scheduler needed.
 - Marketing header/footer are hidden on /dashboard and /admin in `__root.tsx`. Why: panels have their own sidebar shell.
+- Game panel accounts: `ensurePteroUser` in `ptero.server.ts` creates/links the customer's Pterodactyl user (saved on profiles) on first dashboard load; provisioning reuses it. Why: one panel login per customer.
+- Vouchers credit the wallet via `claim_voucher`; coupons are applied by the `orders_set_amount` trigger from `coupon_code`. Why: discounts can't be tampered with client-side.
+- Logo/favicon are stored as small data URLs in `settings` (public storage buckets are blocked). Why: no file storage needed.

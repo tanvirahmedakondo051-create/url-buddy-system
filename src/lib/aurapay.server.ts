@@ -14,36 +14,30 @@ async function apiKey(admin: Admin) {
 async function call(key: string, path: "create" | "verify", body: unknown) {
   const res = await fetch(`${BASE}/${path}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "API-KEY": key,
-      "RT-UDDOKTAPAY-API-KEY": key,
-      Authorization: `Bearer ${key}`,
-    },
+    headers: { "Content-Type": "application/json", Accept: "application/json", "API-KEY": key },
     body: JSON.stringify(body),
   });
   const text = await res.text();
   let json: Record<string, unknown> = {};
   try { json = text ? JSON.parse(text) : {}; } catch { /* non-JSON */ }
-  if (!res.ok) {
+  if (!res.ok || json["status"] === false) {
     console.error("AuraPay error", path, res.status, text.slice(0, 500));
-    throw new Error("AuraPay could not process the request. Please try again.");
+    const msg = typeof json["message"] === "string" ? String(json["message"]) : "";
+    throw new Error(msg ? `AuraPay: ${msg}` : "AuraPay could not process the request. Check the Brand key in Admin → Settings.");
   }
   return json;
 }
 
 export async function aurapayCreate(admin: Admin, o: { orderId: string; amount: number; name: string; email: string; origin: string }) {
   const key = await apiKey(admin);
+  const ret = `${o.origin}/dashboard/pay/return?order=${o.orderId}`;
   const r = await call(key, "create", {
-    full_name: o.name || "Customer",
-    email: o.email,
+    cus_name: o.name || "Customer",
+    cus_email: o.email,
     amount: String(o.amount),
-    metadata: { order_id: o.orderId },
-    redirect_url: `${o.origin}/dashboard/pay/return?order=${o.orderId}`,
-    return_type: "GET",
-    cancel_url: `${o.origin}/dashboard/pay/return?order=${o.orderId}&cancel=1`,
-    webhook_url: `${o.origin}/api/public/aurapay/webhook`,
+    webhook_url: `${o.origin}/api/public/aurapay/webhook?order=${o.orderId}`,
+    success_url: ret,
+    cancel_url: `${ret}&cancel=1`,
   });
   const url = (r["payment_url"] ?? (r["data"] as Record<string, unknown> | undefined)?.["payment_url"]) as string | undefined;
   if (!url) {
@@ -54,23 +48,22 @@ export async function aurapayCreate(admin: Admin, o: { orderId: string; amount: 
 }
 
 /** Verifies an invoice with AuraPay and approves the matching pending order. Safe to call repeatedly. */
-export async function aurapayConfirm(admin: Admin, invoiceId: string, expectOrderId?: string) {
+export async function aurapayConfirm(admin: Admin, transactionId: string, orderId: string) {
   const key = await apiKey(admin);
-  const raw = await call(key, "verify", { invoice_id: invoiceId });
+  const raw = await call(key, "verify", { transaction_id: transactionId });
   const v = ((raw["data"] as Record<string, unknown> | undefined) ?? raw) as Record<string, unknown>;
-  const status = String(v["status"] ?? "").toUpperCase();
-  let meta = v["metadata"] as Record<string, unknown> | string | undefined;
-  if (typeof meta === "string") { try { meta = JSON.parse(meta); } catch { meta = undefined; } }
-  const orderId = String((meta as Record<string, unknown> | undefined)?.["order_id"] ?? "");
-  if (!orderId || (expectOrderId && orderId !== expectOrderId)) return { ok: false as const, message: "Payment does not match this invoice." };
+  const status = String(v["status"] ?? raw["status"] ?? "").toUpperCase();
   if (status !== "COMPLETED") return { ok: false as const, message: status === "PENDING" ? "Payment is still pending." : "Payment was not completed." };
+  const { data: used } = await admin.from("orders").select("id").eq("trx_id", transactionId).neq("id", orderId).maybeSingle();
+  if (used) return { ok: false as const, message: "This transaction was already used." };
 
   const { data: order } = await admin.from("orders").select("*").eq("id", orderId).maybeSingle();
   if (!order || order.method !== "aurapay") return { ok: false as const, message: "Invoice not found." };
   if (order.status === "approved") return { ok: true as const, message: "Payment already confirmed.", orderId };
-  if (Number(v["amount"] ?? 0) + 0.01 < Number(order.amount)) return { ok: false as const, message: "Paid amount is lower than the invoice." };
+  const paid = Number(v["amount"] ?? v["paymentAmount"] ?? NaN);
+  if (!Number.isNaN(paid) && paid + 0.01 < Number(order.amount)) return { ok: false as const, message: "Paid amount is lower than the invoice." };
 
-  const trx = String(v["transaction_id"] ?? invoiceId);
+  const trx = transactionId;
   const { data: sid, error } = await admin.rpc("system_approve_order" as never, { _order_id: orderId, _trx: trx } as never);
   if (error) {
     console.error("approve failed", error);

@@ -321,6 +321,7 @@ export type Database = {
           plan_id: string | null
           ptero_identifier: string | null
           ptero_server_id: number | null
+          reminder_sent_at: string | null
           status: string
           user_id: string
         }
@@ -332,6 +333,7 @@ export type Database = {
           plan_id?: string | null
           ptero_identifier?: string | null
           ptero_server_id?: number | null
+          reminder_sent_at?: string | null
           status?: string
           user_id: string
         }
@@ -343,6 +345,7 @@ export type Database = {
           plan_id?: string | null
           ptero_identifier?: string | null
           ptero_server_id?: number | null
+          reminder_sent_at?: string | null
           status?: string
           user_id?: string
         }
@@ -643,6 +646,10 @@ export type Database = {
       update_my_profile: {
         Args: { _full_name: string; _phone: string }
         Returns: undefined
+      }
+      upgrade_diff: {
+        Args: { _plan_id: string; _service_id: string; _user_id: string }
+        Returns: number
       }
     }
     Enums: {

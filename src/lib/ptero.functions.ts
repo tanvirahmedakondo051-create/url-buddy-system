@@ -16,7 +16,7 @@ export const pteroAction = createServerFn({ method: "POST" })
     if (!isAdmin) throw new Error("Forbidden");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { runPtero } = await import("./ptero.server");
-    return runPtero(supabaseAdmin as never, data.serviceId, data.action, context.userId);
+    return runPtero(supabaseAdmin, data.serviceId, data.action, context.userId);
   });
 
 // Admin-only: test the panel connection and list nests/eggs/locations.

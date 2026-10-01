@@ -1,9 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 
 export type PteroAct = "provision" | "suspend" | "unsuspend" | "terminate";
 
 // Server-only: syncs a service with the Pterodactyl panel. Caller must be authorized already.
-export async function runPtero(supabaseAdmin: SupabaseClient, serviceId: string, action: PteroAct, actorId: string | null) {
+export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceId: string, action: PteroAct, actorId: string | null) {
   const data = { serviceId, action };
   const context = { userId: actorId };
     const { data: rows } = await supabaseAdmin.from("settings").select("key,value");

@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useSettings } from "@/lib/auth";
 
 const navLinks = [
   { to: "/pricing", label: "Pricing" },
@@ -10,16 +11,18 @@ const navLinks = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { data: brand } = useSettings();
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <Link to="/" className="flex items-center gap-2.5">
+          {brand?.logo_url ? <img src={brand.logo_url} alt="" className="size-9 rounded-xl object-contain" /> : (
           <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-cyan shadow-lg shadow-brand/40">
             <span className="font-mono text-sm font-bold text-white">z</span>
-          </div>
+          </div>)}
           <span className="font-display text-lg font-semibold tracking-tight text-white">
-            zerobot
+            {brand?.site_name || "zerobot"}
           </span>
         </Link>
 

@@ -49,7 +49,7 @@ function Services() {
                 <div className="mt-4 flex flex-wrap gap-2">
                   {s.status !== "terminated" && <Btn variant="ghost" onClick={() => setRenew(renew === s.id ? null : s.id)}>Renew 30 days</Btn>}
                   {s["ptero_identifier"] && settings?.["ptero_url"] && (
-                    <a href={`${settings.ptero_url.replace(/\/$/, "")}/server/${s["ptero_identifier"]}`} target="_blank" rel="noreferrer">
+                    <a href={`${settings["ptero_url"].replace(/\/$/, "")}/server/${s["ptero_identifier"]}`} target="_blank" rel="noreferrer">
                       <Btn>Open game panel <ExternalLink className="size-3.5" /></Btn>
                     </a>
                   )}

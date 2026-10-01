@@ -5,13 +5,13 @@ import { PlanGrid } from "@/components/PlanGrid";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — Zerobot | Hosting plans from ৳100/mo" },
+      { title: "Pricing — Hexa Hoster | Hosting plans from ৳100/mo" },
       {
         name: "description",
         content:
           "Simple BDT pricing for bot & app hosting. 8 plans from ৳100 to ৳850/mo. Pay with bKash, Nagad, or Rocket.",
       },
-      { property: "og:title", content: "Zerobot Pricing — Plans from ৳100/mo" },
+      { property: "og:title", content: "Hexa Hoster Pricing — Plans from ৳100/mo" },
       {
         property: "og:description",
         content: "8 hosting plans from ৳100 to ৳850/mo. Pay with bKash, Nagad, or Rocket.",

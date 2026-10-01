@@ -14,13 +14,13 @@ import {
 export const Route = createFileRoute("/features")({
   head: () => ({
     meta: [
-      { title: "Features — Zerobot | A complete hosting stack" },
+      { title: "Features — Hexa Hoster | A complete hosting stack" },
       {
         name: "description",
         content:
           "Web console, env variables, static IPs, SFTP file manager, automated backups, resource monitoring, and GitHub integration — all in one dashboard.",
       },
-      { property: "og:title", content: "Zerobot Features — A complete hosting stack" },
+      { property: "og:title", content: "Hexa Hoster Features — A complete hosting stack" },
       {
         property: "og:description",
         content: "Databases, files, backups, monitoring — everything your bot needs in one dashboard.",

@@ -9,10 +9,10 @@ export const Route = createFileRoute("/_authenticated/admin")({
   },
   head: () => ({
     meta: [
-      { title: "Admin — Zerobot" },
-      { name: "description", content: "zerobot admin panel: clients, orders, services, billing and support." },
-      { property: "og:title", content: "Admin — Zerobot" },
-      { property: "og:description", content: "zerobot admin panel." },
+      { title: "Admin — Hexa Hoster" },
+      { name: "description", content: "Hexa Hoster admin panel: clients, orders, services, billing and support." },
+      { property: "og:title", content: "Admin — Hexa Hoster" },
+      { property: "og:description", content: "Hexa Hoster admin panel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

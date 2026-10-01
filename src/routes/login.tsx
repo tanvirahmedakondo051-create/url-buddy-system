@@ -8,10 +8,10 @@ import { Btn, Field, Input } from "@/components/panel/ui";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Sign in — Zerobot" },
-      { name: "description", content: "Sign in to manage your zerobot servers, invoices and support tickets." },
-      { property: "og:title", content: "Sign in — Zerobot" },
-      { property: "og:description", content: "Sign in to manage your zerobot servers." },
+      { title: "Sign in — Hexa Hoster" },
+      { name: "description", content: "Sign in to manage your Hexa Hoster servers, invoices and support tickets." },
+      { property: "og:title", content: "Sign in — Hexa Hoster" },
+      { property: "og:description", content: "Sign in to manage your Hexa Hoster servers." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -64,7 +64,7 @@ function LoginPage() {
       <Divider />
       <GoogleButton onDone={go} />
       <p className="mt-6 text-center text-sm text-slate-400">
-        New to zerobot? <Link to="/register" className="font-medium text-cyan hover:underline">Create an account</Link>
+        New to Hexa Hoster? <Link to="/register" className="font-medium text-cyan hover:underline">Create an account</Link>
       </p>
     </AuthCard>
   );

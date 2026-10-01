@@ -19,10 +19,10 @@ export function SiteHeader() {
         <Link to="/" className="flex items-center gap-2.5">
           {brand?.["logo_url"] ? <img src={brand["logo_url"]} alt="" className="size-9 rounded-xl object-contain" /> : (
           <div className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-cyan shadow-lg shadow-brand/40">
-            <span className="font-mono text-sm font-bold text-white">z</span>
+            <span className="font-mono text-sm font-bold text-white">{(brand?.["site_name"] || "H").charAt(0)}</span>
           </div>)}
           <span className="font-display text-lg font-semibold tracking-tight text-white">
-            {brand?.["site_name"] || "zerobot"}
+            {brand?.["site_name"] || "Hexa Hoster"}
           </span>
         </Link>
 

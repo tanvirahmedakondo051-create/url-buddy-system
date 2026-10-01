@@ -63,8 +63,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
             {mobile ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
           <Link to="/admin" className="flex items-center gap-2">
-            {brand?.["logo_url"] ? <img src={brand["logo_url"]} alt="" className="size-8 rounded-lg object-contain" /> : <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white">z</span>}
-            <span className="font-display font-bold text-white">{brand?.["site_name"] || "zerobot"}</span>
+            {brand?.["logo_url"] ? <img src={brand["logo_url"]} alt="" className="size-8 rounded-lg object-contain" /> : <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white">{(brand?.["site_name"] || "H").charAt(0)}</span>}
+            <span className="font-display font-bold text-white">{brand?.["site_name"] || "Hexa Hoster"}</span>
             <span className="rounded border border-white/10 bg-white/5 px-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Admin</span>
           </Link>
           <nav className="ml-4 hidden items-center gap-0.5 lg:flex">

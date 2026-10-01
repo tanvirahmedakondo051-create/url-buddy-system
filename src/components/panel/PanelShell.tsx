@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { Menu, X, LogOut, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/lib/auth";
 
 export type NavGroup = { label: string; items: { to: string; label: string; icon: React.ComponentType<{ className?: string }>; exact?: boolean }[] };
 
@@ -11,6 +12,7 @@ export function PanelShell({ groups, badge, children, topRight, onSearch }: { gr
   const [q, setQ] = useState("");
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { data: brand } = useSettings();
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -20,8 +22,9 @@ export function PanelShell({ groups, badge, children, topRight, onSearch }: { gr
   const nav = (
     <nav className="flex h-full flex-col">
       <Link to="/" className="flex items-center gap-2.5 px-5 py-5">
-        <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white shadow-lg shadow-brand/40">z</span>
-        <span className="font-display text-lg font-bold text-white">zerobot</span>
+        {brand?.["logo_url"] ? <img src={brand["logo_url"]} alt="" className="size-9 rounded-xl object-contain" /> : (
+          <span className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white shadow-lg shadow-brand/40">{(brand?.["site_name"] || "H").charAt(0)}</span>)}
+        <span className="font-display text-lg font-bold text-white">{brand?.["site_name"] || "Hexa Hoster"}</span>
         <span className="ml-auto rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{badge}</span>
       </Link>
       <div className="flex-1 space-y-5 overflow-y-auto px-3 pb-4">

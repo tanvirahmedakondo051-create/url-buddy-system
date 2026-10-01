@@ -18,13 +18,13 @@ import artShield from "@/assets/art-shield.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Zerobot — Get your bot online. Hosting from ৳100/mo" },
+      { title: "Hexa Hoster — Get your bot online. Hosting from ৳100/mo" },
       {
         name: "description",
         content:
           "Deploy Telegram & Discord bots, websites, and apps in seconds. BDT payments via bKash, Nagad, Rocket. 99.99% uptime, plans from ৳100/mo.",
       },
-      { property: "og:title", content: "Zerobot — Get your bot online" },
+      { property: "og:title", content: "Hexa Hoster — Get your bot online" },
       {
         property: "og:description",
         content:

@@ -80,7 +80,7 @@ export function Select(p: SelectHTMLAttributes<HTMLSelectElement>) {
 export function Textarea(p: TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...p} className={cn(field, "min-h-28", p.className)} />;
 }
-export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
+export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string | undefined }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-xs font-medium text-slate-400">{label}</span>

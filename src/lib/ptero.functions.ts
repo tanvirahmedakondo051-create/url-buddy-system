@@ -19,7 +19,7 @@ export const pteroAction = createServerFn({ method: "POST" })
     const { data: rows } = await supabaseAdmin.from("settings").select("key,value");
     const s = Object.fromEntries((rows ?? []).map((r) => [r.key, r.value])) as Record<string, string>;
     const key = process.env["PTERODACTYL_API_KEY"];
-    const base = (s.ptero_url || "").replace(/\/$/, "");
+    const base = (s["ptero_url"] || "").replace(/\/$/, "");
 
     const { data: svc } = await supabaseAdmin.from("services").select("*, plans(*), profiles(email,full_name)").eq("id", data.serviceId).single();
     if (!svc) throw new Error("Service not found");
@@ -58,7 +58,7 @@ export const pteroAction = createServerFn({ method: "POST" })
       const found = await api(`/users?filter[email]=${encodeURIComponent(prof.email)}`);
       let pteroUser = found.data?.[0]?.attributes?.id as number | undefined;
       if (!pteroUser) {
-        const uname = prof.email.split("@")[0].replace(/[^a-z0-9]/gi, "").slice(0, 20) + Math.floor(Math.random() * 1000);
+        const uname = (prof.email.split("@")[0] ?? "user").replace(/[^a-z0-9]/gi, "").slice(0, 20) + Math.floor(Math.random() * 1000);
         const created = await api("/users", {
           method: "POST",
           body: JSON.stringify({ email: prof.email, username: uname, first_name: prof.full_name?.split(" ")[0] || "Client", last_name: prof.full_name?.split(" ").slice(1).join(" ") || "User" }),
@@ -66,19 +66,19 @@ export const pteroAction = createServerFn({ method: "POST" })
         pteroUser = created.attributes.id;
       }
       let env: Record<string, string> = {};
-      try { env = JSON.parse(s.ptero_environment || "{}"); } catch { /* keep empty */ }
+      try { env = JSON.parse(s["ptero_environment"] || "{}"); } catch { /* keep empty */ }
       const server = await api("/servers", {
         method: "POST",
         body: JSON.stringify({
           name: svc.name,
           user: pteroUser,
           egg: plan.egg_id,
-          docker_image: s.ptero_docker_image,
-          startup: s.ptero_startup,
+          docker_image: s["ptero_docker_image"],
+          startup: s["ptero_startup"],
           environment: env,
           limits: { memory: plan.ram_mb, swap: 0, disk: plan.disk_gb * 1024, io: 500, cpu: plan.cpu_pct },
           feature_limits: { databases: 1, backups: 2, allocations: 1 },
-          deploy: { locations: [Number(s.ptero_location_id || 1)], dedicated_ip: false, port_range: [] },
+          deploy: { locations: [Number(s["ptero_location_id"] || 1)], dedicated_ip: false, port_range: [] },
         }),
       });
       await supabaseAdmin.from("services").update({ status: "active", ptero_server_id: server.attributes.id, ptero_identifier: server.attributes.identifier }).eq("id", svc.id);

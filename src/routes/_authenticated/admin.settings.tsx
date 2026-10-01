@@ -38,8 +38,8 @@ function SettingsPage() {
   useEffect(() => { if (data) setV(data); }, [data]);
 
   const save = async () => {
-    if (v.ptero_environment) {
-      try { JSON.parse(v.ptero_environment); } catch { return toast.error("Environment must be valid JSON"); }
+    if (v["ptero_environment"]) {
+      try { JSON.parse(v["ptero_environment"]); } catch { return toast.error("Environment must be valid JSON"); }
     }
     const rows = sections.flatMap((s) => s.fields).map((f) => ({ key: f.key, value: v[f.key] ?? "" }));
     const { error } = await supabase.from("settings").upsert(rows);

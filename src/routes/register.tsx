@@ -30,7 +30,11 @@ function RegisterPage() {
   if (sent)
     return (
       <AuthCard title="Check your email" sub={`We sent a confirmation link to ${email}.`}>
-        <p className="text-center text-sm text-slate-400">Click the link in the email to activate your account, then sign in.</p>
+        <p className="text-center text-sm text-slate-400">Click the link in the email to activate your account, then sign in. Check your spam folder too.</p>
+        <Btn variant="ghost" className="mt-4 w-full" onClick={async () => {
+          const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/login" } });
+          if (error) toast.error(error.message); else toast.success("Confirmation email sent again.");
+        }}>Resend email</Btn>
         <Link to="/login" className="mt-6 block text-center text-sm font-medium text-cyan hover:underline">Back to sign in</Link>
       </AuthCard>
     );

@@ -123,3 +123,6 @@
 .btn-shine::after { content: ""; position: absolute; inset: 0; width: 40%; background: linear-gradient(90deg, transparent, color-mix(in oklab, white 35%, transparent), transparent); animation: shine 2.6s ease-in-out infinite; }
 section { animation: reveal-up 0.8s cubic-bezier(.2,.7,.2,1) both; animation-timeline: view(); animation-range: entry 0% cover 20%; }
 @media (prefers-reduced-motion: reduce) { .reveal, section, .plan-glow, .btn-shine, .btn-shine::after { animation: none !important; } }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-6deg); } }
+.icon-bob { animation: bob 3.2s ease-in-out infinite; }
+.icon-bob:nth-child(odd) { animation-delay: .6s; }

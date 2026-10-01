@@ -206,7 +206,7 @@ function HomePage() {
               className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition hover:bg-white/[0.07]"
             >
               <div
-                className={`mb-4 grid size-10 place-items-center rounded-lg border ${iconStyles[f.color]}`}
+                className={`icon-bob mb-4 grid size-10 place-items-center rounded-lg border ${iconStyles[f.color]}`}
               >
                 <f.icon className="size-5" />
               </div>

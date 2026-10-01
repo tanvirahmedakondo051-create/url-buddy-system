@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as PricingRouteImport } from './routes/pricing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -25,27 +37,35 @@ const PricingRoute = PricingRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/features': typeof FeaturesRoute
   '/pricing': typeof PricingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/features': typeof FeaturesRoute
   '/pricing': typeof PricingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/features': typeof FeaturesRoute
   '/pricing': typeof PricingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pricing'
+  fullPaths: '/' | '/faq' | '/features' | '/pricing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pricing'
-  id: '__root__' | '/' | '/pricing'
+  to: '/' | '/faq' | '/features' | '/pricing'
+  id: '__root__' | '/' | '/faq' | '/features' | '/pricing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FaqRoute: typeof FaqRoute
+  FeaturesRoute: typeof FeaturesRoute
   PricingRoute: typeof PricingRoute
 }
 
@@ -56,6 +76,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FaqRoute: FaqRoute,
+  FeaturesRoute: FeaturesRoute,
   PricingRoute: PricingRoute,
 }
 export const routeTree = rootRouteImport

@@ -229,6 +229,7 @@ export type Database = {
           cpu_pct: number
           created_at: string
           disk_gb: number
+          disk_mb: number
           egg_id: number | null
           featured: boolean
           features: string[]
@@ -244,7 +245,8 @@ export type Database = {
           archived?: boolean
           cpu_pct: number
           created_at?: string
-          disk_gb: number
+          disk_gb?: number
+          disk_mb?: number
           egg_id?: number | null
           featured?: boolean
           features?: string[]
@@ -261,6 +263,7 @@ export type Database = {
           cpu_pct?: number
           created_at?: string
           disk_gb?: number
+          disk_mb?: number
           egg_id?: number | null
           featured?: boolean
           features?: string[]

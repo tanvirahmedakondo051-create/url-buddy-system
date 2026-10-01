@@ -1,0 +1,13 @@
+alter table public.plans add column if not exists disk_mb integer;
+update public.plans set disk_mb = disk_gb * 1024 where disk_mb is null;
+alter table public.plans alter column disk_mb set default 2048;
+alter table public.plans alter column disk_mb set not null;
+alter table public.plans alter column disk_gb set default 2;
+revoke execute on function public.claim_voucher(text) from anon, public;
+revoke execute on function public.check_coupon(text, numeric) from anon, public;
+revoke execute on function public.admin_create_invoice(uuid, numeric, text) from anon, public;
+revoke execute on function public.admin_refund_order(uuid) from anon, public;
+grant execute on function public.claim_voucher(text) to authenticated;
+grant execute on function public.check_coupon(text, numeric) to authenticated;
+grant execute on function public.admin_create_invoice(uuid, numeric, text) to authenticated;
+grant execute on function public.admin_refund_order(uuid) to authenticated;

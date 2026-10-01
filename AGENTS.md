@@ -22,3 +22,5 @@
 - Game panel accounts: `ensurePteroUser` in `ptero.server.ts` creates/links the customer's Pterodactyl user (saved on profiles) on first dashboard load; provisioning reuses it. Why: one panel login per customer.
 - Vouchers credit the wallet via `claim_voucher`; coupons are applied by the `orders_set_amount` trigger from `coupon_code`. Why: discounts can't be tampered with client-side.
 - Logo/favicon are stored as small data URLs in `settings` (public storage buckets are blocked). Why: no file storage needed.
+- Plan upgrades are `orders.kind = 'upgrade'`; price difference is computed server-side by `upgrade_diff`, due_date is never changed, and panel limits sync via `runPtero(..., "upgrade")`. Why: customers can't tamper with the upgrade price.
+- Signup verification switch lives in `settings.email_verification`; when off, `signupNoVerify` creates confirmed users server-side. Why: the toggle can't be bypassed from the browser.

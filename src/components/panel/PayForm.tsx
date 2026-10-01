@@ -29,6 +29,16 @@ export function PayForm({
   const [trx, setTrx] = useState("");
   const [sender, setSender] = useState("");
   const [busy, setBusy] = useState(false);
+  const [coupon, setCoupon] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const canCoupon = kind !== "topup";
+  const useCoupon = canCoupon && discount > 0 && method !== "wallet";
+  const total = useCoupon ? Math.max(amount - discount, 1) : amount;
+  const applyCoupon = async () => {
+    const { data, error } = await supabase.rpc("check_coupon" as never, { _code: coupon, _amount: amount } as never);
+    if (error) { setDiscount(0); return toast.error(errMsg(error)); }
+    setDiscount(Number(data)); toast.success(`Coupon applied: −${taka(Number(data))}`);
+  };
   const aura = useServerFn(startAurapay);
   const list = methods.filter((m) => (allowWallet || m.id !== "wallet") && (settings?.[`gw_${m.id}`] ?? "1") !== "0");
   if (list.length && !list.some((m) => m.id === method)) setMethod(list[0]!.id);
@@ -37,7 +47,7 @@ export function PayForm({
     setBusy(true);
     try {
       if (method === "aurapay") {
-        const { url } = await aura({ data: { kind, planId, serviceId, serverName, amount: kind === "topup" ? amount : undefined } });
+        const { url } = await aura({ data: { kind, planId, serviceId, serverName, amount: kind === "topup" ? amount : undefined, coupon: useCoupon ? coupon : undefined } });
         window.location.href = url;
         return;
       }
@@ -49,7 +59,7 @@ export function PayForm({
         if (trx.trim().length < 6) throw new Error("Enter a valid transaction ID");
         const { error } = await supabase.from("orders").insert({
           user_id: userId, kind, plan_id: planId ?? null, service_id: serviceId ?? null, server_name: serverName ?? null,
-          amount, method, trx_id: trx.trim(), sender: sender.trim() || null,
+          amount, method, trx_id: trx.trim(), sender: sender.trim() || null, coupon_code: useCoupon ? coupon : null,
         });
         if (error) throw error;
         toast.success("Payment submitted. An admin will verify it shortly.");
@@ -81,9 +91,16 @@ export function PayForm({
           </button>
         ))}
       </div>
+      {canCoupon && (
+        <div className="flex gap-2">
+          <Input value={coupon} onChange={(e) => { setCoupon(e.target.value.toUpperCase()); setDiscount(0); }} placeholder="Coupon code (optional)" className="font-mono" />
+          <Btn variant="ghost" onClick={applyCoupon} disabled={!coupon.trim()}>Apply</Btn>
+        </div>
+      )}
+      {discount > 0 && method === "wallet" && <p className="text-xs text-amber">Coupons can't be used with wallet payments.</p>}
       {method === "aurapay" ? (
         <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-          You'll go to the secure AuraPay page to pay <b className="text-white">{taka(amount)}</b> with bKash, Nagad or Rocket. Your order is confirmed automatically.
+          You'll go to the secure AuraPay page to pay <b className="text-white">{taka(total)}</b> with bKash, Nagad or Rocket. Your order is confirmed automatically.
         </p>
       ) : method === "wallet" ? (
         <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
@@ -92,7 +109,7 @@ export function PayForm({
       ) : (
         <>
           <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm leading-relaxed text-slate-300">
-            Send <b className="text-white">{taka(amount)}</b> using <b className="capitalize text-white">{method}</b> "Send Money" to{" "}
+            Send <b className="text-white">{taka(total)}</b> using <b className="capitalize text-white">{method}</b> "Send Money" to{" "}
             <span className="font-mono text-cyan">{settings?.[`${method}_number`] ?? "…"}</span>, then enter the transaction ID below.
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -101,7 +118,7 @@ export function PayForm({
           </div>
         </>
       )}
-      <Btn onClick={submit} disabled={busy} className="w-full py-3">{busy ? "Processing…" : `Pay ${taka(amount)}`}</Btn>
+      <Btn onClick={submit} disabled={busy} className="w-full py-3">{busy ? "Processing…" : `Pay ${taka(total)}`}</Btn>
     </div>
   );
 }

@@ -1,24 +1,26 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { ChevronDown, LogOut, Menu, Search, User, X, UserPlus, Package, Megaphone, Receipt, LifeBuoy, Server } from "lucide-react";
+import { ChevronDown, LogOut, Menu, Search, User, X, UserPlus, Package, Megaphone, Receipt, LifeBuoy, Server, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/lib/auth";
 
 type Item = { to: string; label: string };
 const menus: { label: string; to?: string; items?: Item[] }[] = [
   { label: "Home", to: "/admin" },
   { label: "Clients", items: [{ to: "/admin/clients", label: "View / search clients" }, { to: "/admin/services", label: "Products / services" }] },
   { label: "Orders", items: [{ to: "/admin/orders", label: "List all orders" }] },
-  { label: "Billing", items: [{ to: "/admin/orders", label: "Invoices & transactions" }] },
-  { label: "Support", items: [{ to: "/admin/tickets", label: "Support tickets" }, { to: "/admin/announcements", label: "Announcements" }] },
+  { label: "Billing", items: [{ to: "/admin/orders", label: "Invoices & transactions" }, { to: "/admin/promotions", label: "Vouchers & coupons" }] },
+  { label: "Support", items: [{ to: "/admin/tickets", label: "Support tickets" }, { to: "/admin/announcements", label: "Announcements" }, { to: "/admin/replies", label: "Ready-made replies" }] },
   { label: "Setup", items: [{ to: "/admin/plans", label: "Products / plans" }, { to: "/admin/settings", label: "General settings" }, { to: "/admin/settings", label: "Payment gateways" }] },
+  { label: "Reports", items: [{ to: "/admin/reports", label: "Income & clients" }] },
   { label: "Utilities", items: [{ to: "/admin/logs", label: "Activity log" }] },
 ];
 
 const crumbs: Record<string, string> = {
   clients: "Clients", services: "Services", orders: "Orders", plans: "Products / plans", tickets: "Support tickets",
-  announcements: "Announcements", settings: "Settings", logs: "Activity log",
+  announcements: "Announcements", settings: "Settings", logs: "Activity log", promotions: "Vouchers & coupons", reports: "Reports", replies: "Ready-made replies",
 };
 
 function useCounts() {
@@ -45,6 +47,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const [mobile, setMobile] = useState(false);
   const [q, setQ] = useState("");
   const { data: n } = useCounts();
+  const { data: brand } = useSettings();
   const seg = path.split("/")[2];
 
   const isActive = (m: (typeof menus)[number]) =>
@@ -60,8 +63,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
             {mobile ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
           <Link to="/admin" className="flex items-center gap-2">
-            <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white">z</span>
-            <span className="font-display font-bold text-white">zerobot</span>
+            {brand?.logo_url ? <img src={brand.logo_url} alt="" className="size-8 rounded-lg object-contain" /> : <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-brand to-cyan font-mono font-bold text-white">z</span>}
+            <span className="font-display font-bold text-white">{brand?.site_name || "zerobot"}</span>
             <span className="rounded border border-white/10 bg-white/5 px-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400">Admin</span>
           </Link>
           <nav className="ml-4 hidden items-center gap-0.5 lg:flex">
@@ -122,6 +125,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             { to: "/admin/plans", label: "Add product", icon: Package },
             { to: "/admin/tickets", label: "Open tickets", icon: LifeBuoy },
             { to: "/admin/announcements", label: "New announcement", icon: Megaphone },
+            { to: "/admin/promotions", label: "New voucher", icon: Gift },
           ].map((s) => (
             <Link key={s.label} to={s.to} className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-slate-400 hover:bg-white/5 hover:text-white">
               <s.icon className="size-4 text-cyan" /> {s.label}

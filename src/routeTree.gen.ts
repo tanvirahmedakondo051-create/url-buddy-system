@@ -26,6 +26,9 @@ import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminLogsRouteImport } from './routes/_authenticated/admin.logs'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminPlansRouteImport } from './routes/_authenticated/admin.plans'
+import { Route as AuthenticatedAdminPromotionsRouteImport } from './routes/_authenticated/admin.promotions'
+import { Route as AuthenticatedAdminRepliesRouteImport } from './routes/_authenticated/admin.replies'
+import { Route as AuthenticatedAdminReportsRouteImport } from './routes/_authenticated/admin.reports'
 import { Route as AuthenticatedAdminServicesRouteImport } from './routes/_authenticated/admin.services'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminTicketsRouteImport } from './routes/_authenticated/admin.tickets'
@@ -33,6 +36,7 @@ import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardInvoicesRouteImport } from './routes/_authenticated/dashboard.invoices'
 import { Route as AuthenticatedDashboardOrderRouteImport } from './routes/_authenticated/dashboard.order'
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
+import { Route as AuthenticatedDashboardRewardsRouteImport } from './routes/_authenticated/dashboard.rewards'
 import { Route as AuthenticatedDashboardServicesRouteImport } from './routes/_authenticated/dashboard.services'
 import { Route as AuthenticatedDashboardTicketsRouteImport } from './routes/_authenticated/dashboard.tickets'
 import { Route as AuthenticatedDashboardWalletRouteImport } from './routes/_authenticated/dashboard.wallet'
@@ -129,6 +133,24 @@ const AuthenticatedAdminPlansRoute = AuthenticatedAdminPlansRouteImport.update({
   path: '/plans',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminPromotionsRoute =
+  AuthenticatedAdminPromotionsRouteImport.update({
+    id: '/promotions',
+    path: '/promotions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRepliesRoute =
+  AuthenticatedAdminRepliesRouteImport.update({
+    id: '/replies',
+    path: '/replies',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminReportsRoute =
+  AuthenticatedAdminReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminServicesRoute =
   AuthenticatedAdminServicesRouteImport.update({
     id: '/services',
@@ -169,6 +191,12 @@ const AuthenticatedDashboardProfileRoute =
   AuthenticatedDashboardProfileRouteImport.update({
     id: '/profile',
     path: '/profile',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardRewardsRoute =
+  AuthenticatedDashboardRewardsRouteImport.update({
+    id: '/rewards',
+    path: '/rewards',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 const AuthenticatedDashboardServicesRoute =
@@ -235,12 +263,16 @@ export interface FileRoutesByFullPath {
   '/admin/logs': typeof AuthenticatedAdminLogsRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/promotions': typeof AuthenticatedAdminPromotionsRoute
+  '/admin/replies': typeof AuthenticatedAdminRepliesRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
   '/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
   '/dashboard/order': typeof AuthenticatedDashboardOrderRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/rewards': typeof AuthenticatedDashboardRewardsRoute
   '/dashboard/services': typeof AuthenticatedDashboardServicesRoute
   '/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
   '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
@@ -266,12 +298,16 @@ export interface FileRoutesByTo {
   '/admin/logs': typeof AuthenticatedAdminLogsRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/admin/promotions': typeof AuthenticatedAdminPromotionsRoute
+  '/admin/replies': typeof AuthenticatedAdminRepliesRoute
+  '/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/admin/services': typeof AuthenticatedAdminServicesRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
   '/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
   '/dashboard/order': typeof AuthenticatedDashboardOrderRoute
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/rewards': typeof AuthenticatedDashboardRewardsRoute
   '/dashboard/services': typeof AuthenticatedDashboardServicesRoute
   '/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
   '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
@@ -301,12 +337,16 @@ export interface FileRoutesById {
   '/_authenticated/admin/logs': typeof AuthenticatedAdminLogsRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/plans': typeof AuthenticatedAdminPlansRoute
+  '/_authenticated/admin/promotions': typeof AuthenticatedAdminPromotionsRoute
+  '/_authenticated/admin/replies': typeof AuthenticatedAdminRepliesRoute
+  '/_authenticated/admin/reports': typeof AuthenticatedAdminReportsRoute
   '/_authenticated/admin/services': typeof AuthenticatedAdminServicesRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
   '/_authenticated/admin/tickets': typeof AuthenticatedAdminTicketsRouteWithChildren
   '/_authenticated/dashboard/invoices': typeof AuthenticatedDashboardInvoicesRoute
   '/_authenticated/dashboard/order': typeof AuthenticatedDashboardOrderRoute
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/rewards': typeof AuthenticatedDashboardRewardsRoute
   '/_authenticated/dashboard/services': typeof AuthenticatedDashboardServicesRoute
   '/_authenticated/dashboard/tickets': typeof AuthenticatedDashboardTicketsRouteWithChildren
   '/_authenticated/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
@@ -336,12 +376,16 @@ export interface FileRouteTypes {
     | '/admin/logs'
     | '/admin/orders'
     | '/admin/plans'
+    | '/admin/promotions'
+    | '/admin/replies'
+    | '/admin/reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tickets'
     | '/dashboard/invoices'
     | '/dashboard/order'
     | '/dashboard/profile'
+    | '/dashboard/rewards'
     | '/dashboard/services'
     | '/dashboard/tickets'
     | '/dashboard/wallet'
@@ -367,12 +411,16 @@ export interface FileRouteTypes {
     | '/admin/logs'
     | '/admin/orders'
     | '/admin/plans'
+    | '/admin/promotions'
+    | '/admin/replies'
+    | '/admin/reports'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tickets'
     | '/dashboard/invoices'
     | '/dashboard/order'
     | '/dashboard/profile'
+    | '/dashboard/rewards'
     | '/dashboard/services'
     | '/dashboard/tickets'
     | '/dashboard/wallet'
@@ -401,12 +449,16 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/logs'
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/plans'
+    | '/_authenticated/admin/promotions'
+    | '/_authenticated/admin/replies'
+    | '/_authenticated/admin/reports'
     | '/_authenticated/admin/services'
     | '/_authenticated/admin/settings'
     | '/_authenticated/admin/tickets'
     | '/_authenticated/dashboard/invoices'
     | '/_authenticated/dashboard/order'
     | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/rewards'
     | '/_authenticated/dashboard/services'
     | '/_authenticated/dashboard/tickets'
     | '/_authenticated/dashboard/wallet'
@@ -553,6 +605,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPlansRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/promotions': {
+      id: '/_authenticated/admin/promotions'
+      path: '/promotions'
+      fullPath: '/admin/promotions'
+      preLoaderRoute: typeof AuthenticatedAdminPromotionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/replies': {
+      id: '/_authenticated/admin/replies'
+      path: '/replies'
+      fullPath: '/admin/replies'
+      preLoaderRoute: typeof AuthenticatedAdminRepliesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/reports': {
+      id: '/_authenticated/admin/reports'
+      path: '/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AuthenticatedAdminReportsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/services': {
       id: '/_authenticated/admin/services'
       path: '/services'
@@ -600,6 +673,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/rewards': {
+      id: '/_authenticated/dashboard/rewards'
+      path: '/rewards'
+      fullPath: '/dashboard/rewards'
+      preLoaderRoute: typeof AuthenticatedDashboardRewardsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
     '/_authenticated/dashboard/services': {
@@ -695,6 +775,9 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminLogsRoute: typeof AuthenticatedAdminLogsRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
   AuthenticatedAdminPlansRoute: typeof AuthenticatedAdminPlansRoute
+  AuthenticatedAdminPromotionsRoute: typeof AuthenticatedAdminPromotionsRoute
+  AuthenticatedAdminRepliesRoute: typeof AuthenticatedAdminRepliesRoute
+  AuthenticatedAdminReportsRoute: typeof AuthenticatedAdminReportsRoute
   AuthenticatedAdminServicesRoute: typeof AuthenticatedAdminServicesRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
   AuthenticatedAdminTicketsRoute: typeof AuthenticatedAdminTicketsRouteWithChildren
@@ -707,6 +790,9 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminLogsRoute: AuthenticatedAdminLogsRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
   AuthenticatedAdminPlansRoute: AuthenticatedAdminPlansRoute,
+  AuthenticatedAdminPromotionsRoute: AuthenticatedAdminPromotionsRoute,
+  AuthenticatedAdminRepliesRoute: AuthenticatedAdminRepliesRoute,
+  AuthenticatedAdminReportsRoute: AuthenticatedAdminReportsRoute,
   AuthenticatedAdminServicesRoute: AuthenticatedAdminServicesRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
   AuthenticatedAdminTicketsRoute: AuthenticatedAdminTicketsRouteWithChildren,
@@ -734,6 +820,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardInvoicesRoute: typeof AuthenticatedDashboardInvoicesRoute
   AuthenticatedDashboardOrderRoute: typeof AuthenticatedDashboardOrderRoute
   AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardRewardsRoute: typeof AuthenticatedDashboardRewardsRoute
   AuthenticatedDashboardServicesRoute: typeof AuthenticatedDashboardServicesRoute
   AuthenticatedDashboardTicketsRoute: typeof AuthenticatedDashboardTicketsRouteWithChildren
   AuthenticatedDashboardWalletRoute: typeof AuthenticatedDashboardWalletRoute
@@ -746,6 +833,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardInvoicesRoute: AuthenticatedDashboardInvoicesRoute,
     AuthenticatedDashboardOrderRoute: AuthenticatedDashboardOrderRoute,
     AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+    AuthenticatedDashboardRewardsRoute: AuthenticatedDashboardRewardsRoute,
     AuthenticatedDashboardServicesRoute: AuthenticatedDashboardServicesRoute,
     AuthenticatedDashboardTicketsRoute:
       AuthenticatedDashboardTicketsRouteWithChildren,

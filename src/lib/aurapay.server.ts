@@ -5,8 +5,8 @@ const BASE = "https://pay.aurapay.top/api/payment";
 type Admin = SupabaseClient<Database>;
 
 async function apiKey(admin: Admin) {
-  const { data } = await admin.from("gateway_secrets").select("value").eq("key", "aurapay_api_key").maybeSingle();
-  const key = data?.value || process.env["AURAPAY_API_KEY"];
+  const { data } = await admin.from("gateway_secrets").select("value").eq("key", "aurapay_brand_key").maybeSingle();
+  const key = data?.value || process.env["AURAPAY_BRAND_KEY"];
   if (!key) throw new Error("AuraPay is not set up yet. Please choose another payment method.");
   return key;
 }

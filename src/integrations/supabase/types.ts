@@ -62,6 +62,63 @@ export type Database = {
         }
         Relationships: []
       }
+      canned_replies: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          title: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      coupons: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          kind: string
+          max_uses: number
+          used_count: number
+          value: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          kind?: string
+          max_uses?: number
+          used_count?: number
+          value: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          kind?: string
+          max_uses?: number
+          used_count?: number
+          value?: number
+        }
+        Relationships: []
+      }
       gateway_secrets: {
         Row: {
           key: string
@@ -84,7 +141,10 @@ export type Database = {
         Row: {
           admin_note: string | null
           amount: number
+          coupon_code: string | null
           created_at: string
+          description: string | null
+          discount: number
           id: string
           invoice_no: number
           kind: string
@@ -101,7 +161,10 @@ export type Database = {
         Insert: {
           admin_note?: string | null
           amount: number
+          coupon_code?: string | null
           created_at?: string
+          description?: string | null
+          discount?: number
           id?: string
           invoice_no?: number
           kind?: string
@@ -118,7 +181,10 @@ export type Database = {
         Update: {
           admin_note?: string | null
           amount?: number
+          coupon_code?: string | null
           created_at?: string
+          description?: string | null
+          discount?: number
           id?: string
           invoice_no?: number
           kind?: string
@@ -215,6 +281,8 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          ptero_user_id: number | null
+          ptero_username: string | null
           status: string
         }
         Insert: {
@@ -224,6 +292,8 @@ export type Database = {
           full_name?: string | null
           id: string
           phone?: string | null
+          ptero_user_id?: number | null
+          ptero_username?: string | null
           status?: string
         }
         Update: {
@@ -233,6 +303,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          ptero_user_id?: number | null
+          ptero_username?: string | null
           status?: string
         }
         Relationships: []
@@ -400,6 +472,78 @@ export type Database = {
         }
         Relationships: []
       }
+      voucher_claims: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          user_id: string
+          voucher_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          user_id: string
+          voucher_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          user_id?: string
+          voucher_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voucher_claims_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "voucher_claims_voucher_id_fkey"
+            columns: ["voucher_id"]
+            isOneToOne: false
+            referencedRelation: "vouchers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vouchers: {
+        Row: {
+          active: boolean
+          amount: number
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          max_uses: number
+          used_count: number
+        }
+        Insert: {
+          active?: boolean
+          amount: number
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          used_count?: number
+        }
+        Update: {
+          active?: boolean
+          amount?: number
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          used_count?: number
+        }
+        Relationships: []
+      }
       wallet_transactions: {
         Row: {
           amount: number
@@ -441,12 +585,22 @@ export type Database = {
         Args: { _amount: number; _note: string; _user_id: string }
         Returns: undefined
       }
+      admin_create_invoice: {
+        Args: { _amount: number; _description: string; _user_id: string }
+        Returns: number
+      }
       admin_delete_plan: { Args: { _plan_id: string }; Returns: string }
+      admin_refund_order: { Args: { _order_id: string }; Returns: undefined }
       admin_set_service: {
         Args: { _due: string; _service_id: string; _status: string }
         Returns: undefined
       }
       approve_order: { Args: { _order_id: string }; Returns: string }
+      check_coupon: {
+        Args: { _amount: number; _code: string }
+        Returns: number
+      }
+      claim_voucher: { Args: { _code: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

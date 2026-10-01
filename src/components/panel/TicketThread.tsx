@@ -20,6 +20,10 @@ export function TicketThread({ ticketId, userId, staff }: { ticketId: string; us
       return { t: t.data, msgs: m.data ?? [] };
     },
   });
+  const { data: canned } = useQuery({
+    queryKey: ["canned"], enabled: staff,
+    queryFn: async () => (await supabase.from("canned_replies").select("id,title,body").order("title")).data ?? [],
+  });
   if (isLoading || !data) return <Loading />;
   const { t, msgs } = data;
 
@@ -67,7 +71,15 @@ export function TicketThread({ ticketId, userId, staff }: { ticketId: string; us
       ))}
       <Panel className="p-5">
         <Textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Write a reply…" />
-        <div className="mt-3 flex justify-end"><Btn onClick={reply}>Send reply</Btn></div>
+        <div className="mt-3 flex items-center justify-end gap-2">
+          {staff && !!canned?.length && (
+            <Select value="" onChange={(e) => { const c = canned.find((x) => x.id === e.target.value); if (c) setBody((b) => (b ? b + "\n\n" : "") + c.body); }} className="w-52 py-1.5">
+              <option value="">Insert ready-made reply…</option>
+              {canned.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+            </Select>
+          )}
+          <Btn onClick={reply}>Send reply</Btn>
+        </div>
       </Panel>
     </div>
   );

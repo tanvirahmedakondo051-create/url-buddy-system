@@ -11,7 +11,15 @@ import { Btn, Field, Input, PageHeader, Panel, Textarea } from "@/components/pan
 export const Route = createFileRoute("/_authenticated/admin/settings")({ component: SettingsPage });
 
 const sections: { title: string; fields: { key: string; label: string; hint?: string; long?: boolean }[] }[] = [
-  { title: "General", fields: [{ key: "site_name", label: "Site name" }] },
+  {
+    title: "General",
+    fields: [
+      { key: "site_name", label: "Site name" },
+      { key: "support_email", label: "Support email" },
+      { key: "footer_text", label: "Footer text" },
+      { key: "terminate_after_days", label: "Auto-terminate after suspended (days)", hint: "Leave empty to never auto-terminate" },
+    ],
+  },
   {
     title: "Payment numbers",
     fields: [
@@ -42,8 +50,7 @@ const gateways = [
 
 const secrets = [
   { key: "ptero_api_key", label: "Pterodactyl Application API key" },
-  { key: "aurapay_api_key", label: "AuraPay API key" },
-  { key: "aurapay_secret", label: "AuraPay secret" },
+  { key: "aurapay_brand_key", label: "AuraPay Brand key" },
 ];
 
 type TestResult = Awaited<ReturnType<typeof pteroTest>>;
@@ -68,7 +75,7 @@ function SettingsPage() {
     if (v["ptero_environment"]) {
       try { JSON.parse(v["ptero_environment"]); } catch { return toast.error("Environment must be valid JSON"); }
     }
-    const keys = [...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key)];
+    const keys = ["logo_url", "favicon_url", ...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key)];
     const rows = keys.map((k) => ({ key: k, value: v[k] ?? "" }));
     const { error } = await supabase.from("settings").upsert(rows);
     if (error) return toast.error(error.message);
@@ -93,6 +100,26 @@ function SettingsPage() {
     <>
       <PageHeader title="Settings" action={<Btn onClick={save}>Save settings</Btn>} />
       <div className="grid max-w-4xl gap-6">
+        <Panel className="p-6">
+          <h2 className="mb-1 font-display font-semibold text-white">Logo & favicon</h2>
+          <p className="mb-4 text-sm text-slate-400">PNG, SVG or ICO under 150 KB. Click Save settings after choosing.</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {([["logo_url", "Logo"], ["favicon_url", "Favicon"]] as const).map(([k, label]) => (
+              <Field key={k} label={label}>
+                <div className="flex items-center gap-3">
+                  {v[k] ? <img src={v[k]} alt="" className="size-12 rounded-lg border border-white/10 bg-white/5 object-contain" /> : <span className="grid size-12 place-items-center rounded-lg border border-dashed border-white/15 text-xs text-slate-600">none</span>}
+                  <input type="file" accept="image/*" className="text-xs text-slate-400" onChange={(e) => {
+                    const f = e.target.files?.[0]; if (!f) return;
+                    if (f.size > 150_000) return toast.error("File is too large (max 150 KB)");
+                    const r = new FileReader(); r.onload = () => setV((cur) => ({ ...cur, [k]: String(r.result) })); r.readAsDataURL(f);
+                  }} />
+                  {v[k] && <button className="text-xs text-rose-400" onClick={() => setV({ ...v, [k]: "" })}>Remove</button>}
+                </div>
+              </Field>
+            ))}
+          </div>
+        </Panel>
+
         <Panel className="p-6">
           <h2 className="mb-1 font-display font-semibold text-white">Payment gateways</h2>
           <p className="mb-4 text-sm text-slate-400">Turn payment methods on or off at checkout.</p>

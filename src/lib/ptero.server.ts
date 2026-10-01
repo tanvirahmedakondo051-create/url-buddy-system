@@ -47,16 +47,9 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
     if (!plan || !prof?.email) throw new Error("Missing plan or customer email");
     if (!plan.egg_id) throw new Error("Set an egg ID on this plan first (Admin → Plans)");
 
-    const found = await api(`/users?filter[email]=${encodeURIComponent(prof.email)}`);
-    let pteroUser = found.data?.[0]?.attributes?.id as number | undefined;
-    if (!pteroUser) {
-      const uname = (prof.email.split("@")[0] ?? "user").replace(/[^a-z0-9]/gi, "").slice(0, 20) + Math.floor(Math.random() * 1000);
-      const created = await api("/users", {
-        method: "POST",
-        body: JSON.stringify({ email: prof.email, username: uname, first_name: prof.full_name?.split(" ")[0] || "Client", last_name: prof.full_name?.split(" ").slice(1).join(" ") || "User" }),
-      });
-      pteroUser = created.attributes.id;
-    }
+    const acc = await ensurePteroUser(supabaseAdmin, svc.user_id);
+    if (!acc) throw new Error("Game panel is not connected");
+    const pteroUser = acc.id;
     let env: Record<string, string> = {};
     try { env = JSON.parse(s["ptero_environment"] || "{}"); } catch { /* keep empty */ }
     const server = await api("/servers", {
@@ -88,4 +81,65 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
   await supabaseAdmin.from("services").update({ status: statusFor[data.action], ...(data.action === "terminate" ? { ptero_server_id: null, ptero_identifier: null } : {}) }).eq("id", svc.id);
   await log(`Service ${data.action} on game panel`);
   return { ok: true, panel: true, message: `Service ${data.action}d.` };
+}
+
+
+async function pteroConn(admin: SupabaseClient<Database>) {
+  const { data: rows } = await admin.from("settings").select("key,value").in("key", ["ptero_url"]);
+  const base = (rows?.[0]?.value || "").replace(/\/$/, "");
+  const { data: sec } = await admin.from("gateway_secrets").select("value").eq("key", "ptero_api_key").maybeSingle();
+  const key = sec?.value || process.env["PTERODACTYL_API_KEY"];
+  if (!base || !key) return null;
+  const api = async (path: string, init: RequestInit = {}) => {
+    const res = await fetch(base + "/api/application" + path, {
+      ...init,
+      headers: { Authorization: `Bearer ${key}`, Accept: "application/json", "Content-Type": "application/json" },
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      console.error("Pterodactyl error", res.status, text);
+      throw new Error(`Game panel error (${res.status}).`);
+    }
+    return text ? JSON.parse(text) : {};
+  };
+  return { base, api };
+}
+
+const randPass = () => {
+  const c = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  const b = crypto.getRandomValues(new Uint8Array(14));
+  return Array.from(b, (x) => c[x % c.length]).join("") + "!7";
+};
+
+/** Finds or creates the customer's Pterodactyl user and saves it on the profile. Returns null when the panel isn't connected. */
+export async function ensurePteroUser(admin: SupabaseClient<Database>, userId: string) {
+  const conn = await pteroConn(admin);
+  if (!conn) return null;
+  const { data: prof } = await admin.from("profiles").select("email,full_name,ptero_user_id,ptero_username").eq("id", userId).single();
+  if (!prof?.email) throw new Error("Customer has no email");
+  if (prof.ptero_user_id) return { id: prof.ptero_user_id, username: prof.ptero_username ?? "", email: prof.email, base: conn.base };
+  const found = await conn.api(`/users?filter[email]=${encodeURIComponent(prof.email)}`);
+  let attrs = found.data?.[0]?.attributes as { id: number; username: string } | undefined;
+  if (!attrs) {
+    const uname = ((prof.full_name || prof.email.split("@")[0] || "user").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16) || "user") + Math.floor(100 + Math.random() * 900);
+    const created = await conn.api("/users", {
+      method: "POST",
+      body: JSON.stringify({ email: prof.email, username: uname, first_name: prof.full_name?.split(" ")[0] || "Client", last_name: prof.full_name?.split(" ").slice(1).join(" ") || "User", password: randPass() }),
+    });
+    attrs = created.attributes;
+  }
+  await admin.from("profiles").update({ ptero_user_id: attrs!.id, ptero_username: attrs!.username }).eq("id", userId);
+  return { id: attrs!.id, username: attrs!.username, email: prof.email, base: conn.base };
+}
+
+export async function resetPteroPassword(admin: SupabaseClient<Database>, userId: string) {
+  const acc = await ensurePteroUser(admin, userId);
+  if (!acc) throw new Error("Game panel is not connected yet. Please try later.");
+  const conn = (await pteroConn(admin))!;
+  const password = randPass();
+  await conn.api(`/users/${acc.id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ email: acc.email, username: acc.username, first_name: "Client", last_name: "User", password }),
+  });
+  return { ...acc, password };
 }

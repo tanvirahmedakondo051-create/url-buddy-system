@@ -42,7 +42,7 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
 
   if (data.action === "provision") {
     if (svc.ptero_server_id) throw new Error("Already created on the game panel");
-    const plan = svc.plans as { ram_mb: number; disk_gb: number; cpu_pct: number; egg_id: number | null } | null;
+    const plan = svc.plans as { ram_mb: number; disk_gb: number; disk_mb?: number; cpu_pct: number; egg_id: number | null } | null;
     const prof = svc.profiles as { email: string | null; full_name: string | null } | null;
     if (!plan || !prof?.email) throw new Error("Missing plan or customer email");
     if (!plan.egg_id) throw new Error("Set an egg ID on this plan first (Admin → Plans)");
@@ -61,7 +61,7 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
         docker_image: s["ptero_docker_image"],
         startup: s["ptero_startup"],
         environment: env,
-        limits: { memory: plan.ram_mb, swap: 0, disk: plan.disk_gb * 1024, io: 500, cpu: plan.cpu_pct },
+        limits: { memory: plan.ram_mb, swap: 0, disk: plan.disk_mb ?? plan.disk_gb * 1024, io: 500, cpu: plan.cpu_pct },
         feature_limits: { databases: 1, backups: 2, allocations: 1 },
         deploy: { locations: [Number(s["ptero_location_id"] || 1)], dedicated_ip: false, port_range: [] },
       }),

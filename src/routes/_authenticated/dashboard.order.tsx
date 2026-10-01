@@ -37,7 +37,7 @@ function Order() {
                 <p className="mt-2 font-display text-2xl font-bold text-white">{taka(p.price)}<span className="text-sm font-normal text-slate-500">/mo</span></p>
                 <ul className="mt-4 space-y-1.5 text-xs text-slate-400">
                   <li className="flex items-center gap-2"><MemoryStick className="size-3.5 text-cyan" />{p.ram_mb >= 1024 ? p.ram_mb / 1024 + " GB" : p.ram_mb + " MB"} RAM</li>
-                  <li className="flex items-center gap-2"><HardDrive className="size-3.5 text-cyan" />{p.disk_gb} GB SSD</li>
+                  <li className="flex items-center gap-2"><HardDrive className="size-3.5 text-cyan" />{p.disk_mb >= 1024 ? +(p.disk_mb / 1024).toFixed(1) + " GB" : p.disk_mb + " MB"} SSD</li>
                   <li className="flex items-center gap-2"><Cpu className="size-3.5 text-cyan" />{p.cpu_pct}% CPU</li>
                   {p.features.map((f) => <li key={f} className="flex items-center gap-2"><Check className="size-3.5 text-mint" />{f}</li>)}
                 </ul>

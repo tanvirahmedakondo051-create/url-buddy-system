@@ -16,7 +16,7 @@ function Services() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["my-services", user.id],
     queryFn: async () =>
-      (await supabase.from("services").select("*, plans(name,price,ram_mb,disk_gb,cpu_pct)").eq("user_id", user.id).order("created_at", { ascending: false })).data ?? [],
+      (await supabase.from("services").select("*, plans(name,price,ram_mb,disk_mb,cpu_pct)").eq("user_id", user.id).order("created_at", { ascending: false })).data ?? [],
   });
 
   return (
@@ -27,7 +27,7 @@ function Services() {
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           {data?.map((s) => {
-            const p = s.plans as { name: string; price: number; ram_mb: number; disk_gb: number; cpu_pct: number } | null;
+            const p = s.plans as { name: string; price: number; ram_mb: number; disk_mb: number; cpu_pct: number } | null;
             return (
               <Panel key={s.id} className="p-5">
                 <div className="flex items-start justify-between gap-3">
@@ -38,7 +38,7 @@ function Services() {
                   <StatusBadge status={s.status} />
                 </div>
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                  {[["RAM", p ? (p.ram_mb >= 1024 ? p.ram_mb / 1024 + " GB" : p.ram_mb + " MB") : "—"], ["Disk", (p?.disk_gb ?? 0) + " GB"], ["CPU", (p?.cpu_pct ?? 0) + "%"]].map(([k, v]) => (
+                  {[["RAM", p ? (p.ram_mb >= 1024 ? p.ram_mb / 1024 + " GB" : p.ram_mb + " MB") : "—"], ["Disk", (p ? (p.disk_mb >= 1024 ? +(p.disk_mb / 1024).toFixed(1) + " GB" : p.disk_mb + " MB") : "—")], ["CPU", (p?.cpu_pct ?? 0) + "%"]].map(([k, v]) => (
                     <div key={k} className="rounded-xl border border-white/10 bg-white/5 py-2.5">
                       <p className="text-[10px] uppercase tracking-wider text-slate-500">{k}</p>
                       <p className="font-mono text-sm text-white">{v}</p>

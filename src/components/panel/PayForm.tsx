@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { startAurapay } from "@/lib/aurapay.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { errMsg, taka, useProfile, useSettings } from "@/lib/auth";
 import { Btn, Field, Input } from "./ui";
 import { cn } from "@/lib/utils";
 
-type Method = "bkash" | "nagad" | "rocket" | "wallet";
+type Method = "aurapay" | "bkash" | "nagad" | "rocket" | "wallet";
 const methods: { id: Method; label: string; color: string }[] = [
+  { id: "aurapay", label: "AuraPay (instant)", color: "from-cyan/30" },
   { id: "bkash", label: "bKash", color: "from-pink-500/30" },
   { id: "nagad", label: "Nagad", color: "from-orange-500/30" },
   { id: "rocket", label: "Rocket", color: "from-purple-500/30" },
@@ -22,16 +25,22 @@ export function PayForm({
   const qc = useQueryClient();
   const { data: settings } = useSettings();
   const { data: profile } = useProfile(userId);
-  const [method, setMethod] = useState<Method>("bkash");
+  const [method, setMethod] = useState<Method>("aurapay");
   const [trx, setTrx] = useState("");
   const [sender, setSender] = useState("");
   const [busy, setBusy] = useState(false);
+  const aura = useServerFn(startAurapay);
   const list = methods.filter((m) => (allowWallet || m.id !== "wallet") && (settings?.[`gw_${m.id}`] ?? "1") !== "0");
   if (list.length && !list.some((m) => m.id === method)) setMethod(list[0]!.id);
 
   const submit = async () => {
     setBusy(true);
     try {
+      if (method === "aurapay") {
+        const { url } = await aura({ data: { kind, planId, serviceId, serverName, amount: kind === "topup" ? amount : undefined } });
+        window.location.href = url;
+        return;
+      }
       if (method === "wallet") {
         const { error } = await supabase.rpc("pay_with_wallet", { _kind: kind, _plan_id: planId ?? null, _service_id: serviceId ?? null, _server_name: serverName ?? "" } as never);
         if (error) throw error;
@@ -56,7 +65,7 @@ export function PayForm({
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {list.map((m) => (
           <button
             key={m.id}
@@ -72,7 +81,11 @@ export function PayForm({
           </button>
         ))}
       </div>
-      {method === "wallet" ? (
+      {method === "aurapay" ? (
+        <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+          You'll go to the secure AuraPay page to pay <b className="text-white">{taka(amount)}</b> with bKash, Nagad or Rocket. Your order is confirmed automatically.
+        </p>
+      ) : method === "wallet" ? (
         <p className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
           Wallet balance: <b className="text-mint">{taka(profile?.balance)}</b>. {Number(profile?.balance ?? 0) < amount && <span className="text-amber">Not enough balance — top up first.</span>}
         </p>

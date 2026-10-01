@@ -8,10 +8,10 @@ import { Btn, Field, Input } from "@/components/panel/ui";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset password — Zerobot" },
-      { name: "description", content: "Get a link to reset your zerobot account password." },
-      { property: "og:title", content: "Reset password — Zerobot" },
-      { property: "og:description", content: "Reset your zerobot account password." },
+      { title: "Reset password — Hexa Hoster" },
+      { name: "description", content: "Get a link to reset your Hexa Hoster account password." },
+      { property: "og:title", content: "Reset password — Hexa Hoster" },
+      { property: "og:description", content: "Reset your Hexa Hoster account password." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

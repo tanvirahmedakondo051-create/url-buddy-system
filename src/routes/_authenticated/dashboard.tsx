@@ -6,10 +6,10 @@ import { taka, useIsAdmin, useProfile } from "@/lib/auth";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Client area — Zerobot" },
-      { name: "description", content: "Manage your zerobot servers, invoices, wallet and tickets." },
-      { property: "og:title", content: "Client area — Zerobot" },
-      { property: "og:description", content: "Manage your zerobot servers." },
+      { title: "Client area — Hexa Hoster" },
+      { name: "description", content: "Manage your Hexa Hoster servers, invoices, wallet and tickets." },
+      { property: "og:title", content: "Client area — Hexa Hoster" },
+      { property: "og:description", content: "Manage your Hexa Hoster servers." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

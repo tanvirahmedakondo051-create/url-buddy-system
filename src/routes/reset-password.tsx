@@ -8,10 +8,10 @@ import { Btn, Field, Input } from "@/components/panel/ui";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set new password — Zerobot" },
-      { name: "description", content: "Choose a new password for your zerobot account." },
-      { property: "og:title", content: "Set new password — Zerobot" },
-      { property: "og:description", content: "Choose a new password for your zerobot account." },
+      { title: "Set new password — Hexa Hoster" },
+      { name: "description", content: "Choose a new password for your Hexa Hoster account." },
+      { property: "og:title", content: "Set new password — Hexa Hoster" },
+      { property: "og:description", content: "Choose a new password for your Hexa Hoster account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

@@ -2,11 +2,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { errMsg } from "@/lib/auth";
+import { errMsg, useSettings } from "@/lib/auth";
 import { Btn, Loading, Panel, Select, StatusBadge, Textarea } from "./ui";
 import { cn } from "@/lib/utils";
 
 export function TicketThread({ ticketId, userId, staff }: { ticketId: string; userId: string; staff: boolean }) {
+  const { data: brand } = useSettings();
   const qc = useQueryClient();
   const [body, setBody] = useState("");
   const { data, isLoading } = useQuery({
@@ -65,7 +66,7 @@ export function TicketThread({ ticketId, userId, staff }: { ticketId: string; us
       </Panel>
       {msgs.map((m) => (
         <Panel key={m.id} className={cn("p-5", m.is_staff && "border-brand/30 bg-brand/[0.07]")}>
-          <p className="mb-2 text-xs font-semibold text-slate-400">{m.is_staff ? "zerobot Staff" : staff ? owner?.full_name || "Client" : "You"} · <span className="font-normal text-slate-600">{new Date(m.created_at).toLocaleString()}</span></p>
+          <p className="mb-2 text-xs font-semibold text-slate-400">{m.is_staff ? `${brand?.["site_name"] || "Hexa Hoster"} Staff` : staff ? owner?.full_name || "Client" : "You"} · <span className="font-normal text-slate-600">{new Date(m.created_at).toLocaleString()}</span></p>
           <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-200">{m.body}</p>
         </Panel>
       ))}

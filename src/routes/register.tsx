@@ -10,10 +10,10 @@ import { Btn, Field, Input } from "@/components/panel/ui";
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
-      { title: "Create account — Zerobot" },
-      { name: "description", content: "Create your zerobot account and deploy bots and apps in seconds." },
-      { property: "og:title", content: "Create account — Zerobot" },
-      { property: "og:description", content: "Create your zerobot account and deploy in seconds." },
+      { title: "Create account — Hexa Hoster" },
+      { name: "description", content: "Create your Hexa Hoster account and deploy bots and apps in seconds." },
+      { property: "og:title", content: "Create account — Hexa Hoster" },
+      { property: "og:description", content: "Create your Hexa Hoster account and deploy in seconds." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

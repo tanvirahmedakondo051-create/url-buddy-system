@@ -9,7 +9,7 @@ export function ConsoleMockup() {
           <span className="size-3 rounded-full bg-amber/80" />
           <span className="size-3 rounded-full bg-mint/80" />
           <span className="ml-3 font-mono text-xs text-slate-400">
-            zerobot — my-bot · console
+            hexa — my-bot · console
           </span>
           <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-mint">
             <span className="size-1.5 animate-pulse rounded-full bg-mint" />
@@ -57,7 +57,7 @@ export function ConsoleMockup() {
         </div>
         {/* console logs */}
         <div className="mx-3 mb-3 rounded-lg border border-white/10 bg-ink2/80 p-3 font-mono text-[11px] leading-relaxed">
-          <div className="text-slate-500">$ zerobot deploy my-bot</div>
+          <div className="text-slate-500">$ hexa deploy my-bot</div>
           <div className="text-cyan">▸ pulling image node:20-alpine …</div>
           <div className="text-mint">✓ isolated container created</div>
           <div className="text-slate-400">▸ mounting /app · port 3000</div>

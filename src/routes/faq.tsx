@@ -3,16 +3,16 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: "FAQ — Zerobot | Common questions answered" },
+      { title: "FAQ — Hexa Hoster | Common questions answered" },
       {
         name: "description",
         content:
-          "How fast is activation? Do servers sleep? Payment methods, refunds, runtimes — all your zerobot hosting questions answered.",
+          "How fast is activation? Do servers sleep? Payment methods, refunds, runtimes — all your Hexa Hoster hosting questions answered.",
       },
-      { property: "og:title", content: "Zerobot FAQ — Common questions answered" },
+      { property: "og:title", content: "Hexa Hoster FAQ — Common questions answered" },
       {
         property: "og:description",
-        content: "Activation, payments, refunds, runtimes — everything about zerobot hosting.",
+        content: "Activation, payments, refunds, runtimes — everything about Hexa Hoster hosting.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -71,7 +71,7 @@ function FaqPage() {
           </span>
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-slate-400">
-          Everything you need to know about hosting on zerobot. Can't find your
+          Everything you need to know about hosting on Hexa Hoster. Can't find your
           answer? Create an account and ask support.
         </p>
       </div>

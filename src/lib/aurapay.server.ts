@@ -34,7 +34,8 @@ export async function aurapayCreate(admin: Admin, o: { orderId: string; amount: 
   const r = await call(key, "create", {
     cus_name: o.name || "Customer",
     cus_email: o.email,
-    amount: String(o.amount),
+    amount: Number(o.amount).toFixed(2),
+    metadata: { order_id: o.orderId },
     webhook_url: `${o.origin}/api/public/aurapay/webhook?order=${o.orderId}`,
     success_url: ret,
     cancel_url: `${ret}&cancel=1`,

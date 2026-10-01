@@ -8,8 +8,8 @@ import { Btn, Field, Input, PageHeader, Panel, Select, StatusBadge, Table, Td } 
 
 export const Route = createFileRoute("/_authenticated/admin/plans")({ component: Plans });
 
-type Form = { id?: string | undefined; name: string; tier: string; price: number; ram_mb: number; disk_gb: number; cpu_pct: number; features: string; featured: boolean; active: boolean; sort: number; egg_id: string };
-const blank: Form = { name: "", tier: "Mini", price: 100, ram_mb: 512, disk_gb: 2, cpu_pct: 50, features: "", featured: false, active: true, sort: 99, egg_id: "" };
+type Form = { id?: string | undefined; name: string; tier: string; price: number; ram_mb: number; disk_mb: number; cpu_pct: number; features: string; featured: boolean; active: boolean; sort: number; egg_id: string };
+const blank: Form = { name: "", tier: "Mini", price: 100, ram_mb: 512, disk_mb: 2048, cpu_pct: 50, features: "", featured: false, active: true, sort: 99, egg_id: "" };
 
 function Plans() {
   const { user } = Route.useRouteContext();
@@ -19,7 +19,7 @@ function Plans() {
 
   const save = async () => {
     if (!f) return;
-    const row = { name: f.name, tier: f.tier, price: f.price, ram_mb: f.ram_mb, disk_gb: f.disk_gb, cpu_pct: f.cpu_pct, features: f.features.split(",").map((x) => x.trim()).filter(Boolean), featured: f.featured, active: f.active, sort: f.sort, egg_id: f.egg_id ? Number(f.egg_id) : null };
+    const row = { name: f.name, tier: f.tier, price: f.price, ram_mb: f.ram_mb, disk_mb: f.disk_mb, disk_gb: Math.max(1, Math.round(f.disk_mb / 1024)), cpu_pct: f.cpu_pct, features: f.features.split(",").map((x) => x.trim()).filter(Boolean), featured: f.featured, active: f.active, sort: f.sort, egg_id: f.egg_id ? Number(f.egg_id) : null };
     const { error } = f.id ? await supabase.from("plans").update(row).eq("id", f.id) : await supabase.from("plans").insert(row);
     if (error) return toast.error(error.message);
     await supabase.from("admin_logs").insert({ admin_id: user.id, action: f.id ? "Updated plan" : "Created plan", target: f.name });
@@ -49,7 +49,7 @@ function Plans() {
             <Field label="Price (৳/month)"><Input type="number" value={f.price} onChange={num("price")} /></Field>
             <Field label="Sort order"><Input type="number" value={f.sort} onChange={num("sort")} /></Field>
             <Field label="RAM (MB)"><Input type="number" value={f.ram_mb} onChange={num("ram_mb")} /></Field>
-            <Field label="Disk (GB)"><Input type="number" value={f.disk_gb} onChange={num("disk_gb")} /></Field>
+            <Field label="Disk (MB)" hint="1024 MB = 1 GB"><Input type="number" value={f.disk_mb} onChange={num("disk_mb")} /></Field>
             <Field label="CPU (%)"><Input type="number" value={f.cpu_pct} onChange={num("cpu_pct")} /></Field>
             <Field label="Game panel egg ID" hint="From Pterodactyl → Nests"><Input value={f.egg_id} onChange={(e) => setF({ ...f, egg_id: e.target.value })} /></Field>
             <div className="sm:col-span-2 lg:col-span-4"><Field label="Features (comma separated)"><Input value={f.features} onChange={(e) => setF({ ...f, features: e.target.value })} /></Field></div>
@@ -66,12 +66,12 @@ function Plans() {
           <tr key={p.id}>
             <Td className="text-white">{p.name} <span className="text-xs text-slate-500">{p.tier}</span>{p.featured && <span className="ml-2 text-[10px] text-indigo-300">★ popular</span>}</Td>
             <Td className="font-mono">{taka(p.price)}</Td>
-            <Td>{p.ram_mb} MB</Td><Td>{p.disk_gb} GB</Td><Td>{p.cpu_pct}%</Td><Td>{p.egg_id ?? "—"}</Td>
+            <Td>{p.ram_mb} MB</Td><Td>{p.disk_mb} MB</Td><Td>{p.cpu_pct}%</Td><Td>{p.egg_id ?? "—"}</Td>
             <Td><StatusBadge status={p.active ? "active" : "closed"} /></Td>
             <Td>
               <div className="flex gap-2">
-                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Edit</Btn>
-                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, id: undefined, name: p.name + " copy", price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Copy</Btn>
+                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, disk_mb: p.disk_mb, price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Edit</Btn>
+                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, id: undefined, disk_mb: p.disk_mb, name: p.name + " copy", price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Copy</Btn>
                 <Btn variant="ghost" className="px-3 py-1 text-xs text-rose-300" onClick={() => del(p.id, p.name)}>Delete</Btn>
               </div>
             </Td>

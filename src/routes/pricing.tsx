@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Cpu, HardDrive, MemoryStick } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Check } from "lucide-react";
+import { PlanGrid } from "@/components/PlanGrid";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -21,17 +22,6 @@ export const Route = createFileRoute("/pricing")({
   }),
   component: PricingPage,
 });
-
-const plans = [
-  { name: "Mini-v1", price: 100, ram: "512 MB", ssd: "2 GB", cpu: "50%", domain: false, popular: false },
-  { name: "Mini-v2", price: 150, ram: "768 MB", ssd: "3 GB", cpu: "50%", domain: false, popular: false },
-  { name: "Mini-v3", price: 200, ram: "1 GB", ssd: "4 GB", cpu: "75%", domain: false, popular: false },
-  { name: "Pro-v1", price: 350, ram: "2 GB", ssd: "10 GB", cpu: "100%", domain: true, popular: true },
-  { name: "Pro-v2", price: 450, ram: "3 GB", ssd: "20 GB", cpu: "150%", domain: true, popular: false },
-  { name: "Pro-v3", price: 550, ram: "4 GB", ssd: "30 GB", cpu: "200%", domain: true, popular: false },
-  { name: "Mega-v1", price: 600, ram: "4 GB", ssd: "40 GB", cpu: "300%", domain: true, popular: false },
-  { name: "Mega-v2", price: 850, ram: "6 GB", ssd: "60 GB", cpu: "400%", domain: true, popular: false },
-];
 
 const included = [
   "24/7 uptime — containers never sleep",
@@ -66,59 +56,7 @@ function PricingPage() {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {plans.map((plan) => (
-          <div
-            key={plan.name}
-            className={
-              plan.popular
-                ? "relative rounded-2xl border border-brand/40 bg-gradient-to-b from-brand/15 to-white/5 p-6 shadow-xl shadow-brand/20 backdrop-blur-xl"
-                : "rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition hover:bg-white/[0.07]"
-            }
-          >
-            {plan.popular && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-brand to-cyan px-3 py-1 text-[11px] font-semibold text-white">
-                Most popular
-              </div>
-            )}
-            <div className={`text-sm font-medium ${plan.popular ? "text-brand" : "text-slate-400"}`}>
-              {plan.name}
-            </div>
-            <div className="mt-3 flex items-baseline gap-1">
-              <span className="font-display text-4xl font-bold text-white">
-                ৳{plan.price}
-              </span>
-              <span className="text-slate-500">/mo</span>
-            </div>
-            <ul className="mt-5 space-y-2.5 text-sm text-slate-300">
-              <li className="flex items-center gap-2">
-                <MemoryStick className="size-4 text-cyan" /> {plan.ram} RAM
-              </li>
-              <li className="flex items-center gap-2">
-                <HardDrive className="size-4 text-cyan" /> {plan.ssd} SSD
-              </li>
-              <li className="flex items-center gap-2">
-                <Cpu className="size-4 text-cyan" /> {plan.cpu} CPU
-              </li>
-              {plan.domain && (
-                <li className="flex items-center gap-2">
-                  <Check className="size-4 text-mint" /> Custom domain included
-                </li>
-              )}
-            </ul>
-            <Link
-              to="/register"
-              className={
-                plan.popular
-                  ? "mt-6 block rounded-xl bg-gradient-to-r from-brand to-cyan py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-brand/30 transition hover:shadow-brand/50"
-                  : "mt-6 block rounded-xl border border-white/15 bg-white/5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-white/10"
-              }
-            >
-              Deploy server
-            </Link>
-          </div>
-        ))}
-      </div>
+      <div className="mt-12"><PlanGrid /></div>
 
       {/* Every plan includes */}
       <div className="mt-14 rounded-3xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl sm:p-10">

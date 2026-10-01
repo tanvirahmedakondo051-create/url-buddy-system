@@ -40,7 +40,13 @@ function LoginPage() {
           setBusy(true);
           const { error } = await supabase.auth.signInWithPassword({ email, password });
           setBusy(false);
-          if (error) return toast.error(error.message);
+          if (error) {
+            if (error.code === "email_not_confirmed" || /not confirmed/i.test(error.message)) {
+              await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: window.location.origin + "/login" } });
+              return toast.error("Please verify your email first. We just sent you a new confirmation link.");
+            }
+            return toast.error(error.message === "Invalid login credentials" ? "Wrong email or password." : error.message);
+          }
           go();
         }}
       >

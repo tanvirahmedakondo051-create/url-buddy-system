@@ -109,3 +109,20 @@
     font-family: var(--font-body);
   }
 }
+
+/* Premium motion */
+@keyframes reveal-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes spin-border { to { --angle: 360deg; } }
+@keyframes shine { from { transform: translateX(-120%) skewX(-20deg); } to { transform: translateX(220%) skewX(-20deg); } }
+@keyframes glow-pulse { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-brand) 45%, transparent); } 50% { box-shadow: 0 0 28px 4px color-mix(in oklab, var(--color-cyan) 35%, transparent); } }
+@property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.reveal { animation: reveal-up 0.7s cubic-bezier(.2,.7,.2,1) both; animation-timeline: view(); animation-range: entry 0% cover 25%; }
+@supports not (animation-timeline: view()) { .reveal { animation-timeline: auto; } }
+.plan-glow { background: conic-gradient(from var(--angle), var(--color-brand), var(--color-cyan), var(--color-mint), var(--color-brand)); animation: spin-border 4s linear infinite; }
+.btn-shine { position: relative; overflow: hidden; animation: glow-pulse 2.8s ease-in-out infinite; }
+.btn-shine::after { content: ""; position: absolute; inset: 0; width: 40%; background: linear-gradient(90deg, transparent, color-mix(in oklab, white 35%, transparent), transparent); animation: shine 2.6s ease-in-out infinite; }
+section { animation: reveal-up 0.8s cubic-bezier(.2,.7,.2,1) both; animation-timeline: view(); animation-range: entry 0% cover 20%; }
+@media (prefers-reduced-motion: reduce) { .reveal, section, .plan-glow, .btn-shine, .btn-shine::after { animation: none !important; } }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-6deg); } }
+.icon-bob { animation: bob 3.2s ease-in-out infinite; }
+.icon-bob:nth-child(odd) { animation-delay: .6s; }

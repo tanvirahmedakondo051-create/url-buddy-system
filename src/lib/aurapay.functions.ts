@@ -32,7 +32,9 @@ export const startAurapay = createServerFn({ method: "POST" })
     }).select("id, amount").single();
     if (error || !order) throw new Error(error?.message ?? "Could not create invoice");
     const { data: prof } = await supabaseAdmin.from("profiles").select("full_name,email").eq("id", context.userId).single();
-    const origin = new URL(getRequest().url).origin;
+    let origin = new URL(getRequest().url).origin;
+    // The preview link is private, so AuraPay can't reach it. Use the public site address instead.
+    if (origin.includes("id-preview--") || origin.includes("localhost")) origin = "https://project--18c7e2dd-4c42-483b-b24a-1f17f3b7923a.lovable.app";
     const url = await aurapayCreate(supabaseAdmin, {
       orderId: order.id, amount: Number(order.amount), name: prof?.full_name ?? "", email: prof?.email ?? "", origin,
     });

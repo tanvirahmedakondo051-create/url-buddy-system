@@ -479,6 +479,10 @@ export type Database = {
         Returns: undefined
       }
       suspend_overdue: { Args: never; Returns: number }
+      system_approve_order: {
+        Args: { _order_id: string; _trx: string }
+        Returns: string
+      }
       update_my_profile: {
         Args: { _full_name: string; _phone: string }
         Returns: undefined

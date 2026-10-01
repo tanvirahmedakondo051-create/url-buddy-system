@@ -126,3 +126,8 @@ section { animation: reveal-up 0.8s cubic-bezier(.2,.7,.2,1) both; animation-tim
 @keyframes bob { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-6deg); } }
 .icon-bob { animation: bob 3.2s ease-in-out infinite; }
 .icon-bob:nth-child(odd) { animation-delay: .6s; }
+
+@keyframes art-float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-14px) rotate(3deg); } }
+@keyframes art-glow { 0%,100% { filter: drop-shadow(0 0 12px rgb(34 211 238 / .35)); } 50% { filter: drop-shadow(0 0 28px rgb(52 211 153 / .6)); } }
+.art-float { animation: art-float 6s ease-in-out infinite, art-glow 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .art-float { animation: none; } }

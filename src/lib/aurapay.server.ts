@@ -78,5 +78,13 @@ export async function aurapayConfirm(admin: Admin, transactionId: string, orderI
       console.error("auto provision failed", e);
     }
   }
+  if (order.kind === "upgrade" && sid) {
+    try {
+      const { runPtero } = await import("./ptero.server");
+      await runPtero(admin, sid as unknown as string, "upgrade", null);
+    } catch (e) {
+      console.error("auto upgrade failed", e);
+    }
+  }
   return { ok: true as const, message: "Payment confirmed.", orderId };
 }

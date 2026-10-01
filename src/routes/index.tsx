@@ -11,6 +11,9 @@ import {
   Check,
 } from "lucide-react";
 import { ConsoleMockup } from "../components/ConsoleMockup";
+import artBot from "@/assets/art-bot.png";
+import artServer from "@/assets/art-server.png";
+import artShield from "@/assets/art-shield.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -178,7 +181,10 @@ function HomePage() {
           </div>
         </div>
 
-        <ConsoleMockup />
+        <div className="relative">
+          <img src={artBot} alt="" width={816} height={816} className="art-float pointer-events-none absolute -top-14 -right-4 z-10 w-28 sm:w-36" />
+          <ConsoleMockup />
+        </div>
       </section>
 
       {/* RUNTIMES */}
@@ -254,6 +260,10 @@ function HomePage() {
           </Link>
         </div>
         <div className="mt-8"><PlanGrid limit={3} /></div>
+        <div className="mt-10 flex justify-center gap-10">
+          <img src={artServer} alt="Fast servers" loading="lazy" width={816} height={816} className="art-float w-24 sm:w-32" />
+          <img src={artShield} alt="Protected hosting" loading="lazy" width={816} height={816} className="art-float w-24 sm:w-32 [animation-delay:1.5s]" />
+        </div>
       </section>
 
       {/* EVERY PLAN INCLUDES */}

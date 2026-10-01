@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
-export type PteroAct = "provision" | "suspend" | "unsuspend" | "terminate";
+export type PteroAct = "provision" | "suspend" | "unsuspend" | "terminate" | "upgrade";
 
 // Server-only: syncs a service with the Pterodactyl panel. Caller must be authorized already.
 export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceId: string, action: PteroAct, actorId: string | null) {
@@ -16,7 +16,7 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
   const { data: svc } = await supabaseAdmin.from("services").select("*, plans(*), profiles(email,full_name)").eq("id", data.serviceId).single();
   if (!svc) throw new Error("Service not found");
 
-  const statusFor = { provision: "active", suspend: "suspended", unsuspend: "active", terminate: "terminated" } as const;
+  const statusFor = { provision: "active", suspend: "suspended", unsuspend: "active", terminate: "terminated", upgrade: svc.status } as Record<PteroAct, string>;
   const log = async (msg: string) =>
     supabaseAdmin.from("admin_logs").insert({ admin_id: context.userId, action: msg, target: svc.name });
 
@@ -75,6 +75,23 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
     await supabaseAdmin.from("services").update({ status: statusFor[data.action] }).eq("id", svc.id);
     await log(`Service ${data.action}`);
     return { ok: true, panel: false, message: "Status updated (server not on game panel yet)." };
+  }
+  if (data.action === "upgrade") {
+    const plan = svc.plans as { ram_mb: number; disk_gb: number; disk_mb?: number; cpu_pct: number } | null;
+    if (!plan) throw new Error("Missing plan");
+    const cur = await api(`/servers/${svc.ptero_server_id}`);
+    const a = cur.attributes;
+    await api(`/servers/${svc.ptero_server_id}/build`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        allocation: a.allocation,
+        memory: plan.ram_mb, swap: a.limits?.swap ?? 0, disk: plan.disk_mb ?? plan.disk_gb * 1024, io: a.limits?.io ?? 500, cpu: plan.cpu_pct,
+        threads: a.limits?.threads ?? null,
+        feature_limits: a.feature_limits ?? { databases: 1, backups: 2, allocations: 1 },
+      }),
+    });
+    await log("Upgraded server resources on game panel");
+    return { ok: true, panel: true, message: "Server resources upgraded." };
   }
   if (data.action === "terminate") await api(`/servers/${svc.ptero_server_id}`, { method: "DELETE" });
   else await api(`/servers/${svc.ptero_server_id}/${data.action}`, { method: "POST" });

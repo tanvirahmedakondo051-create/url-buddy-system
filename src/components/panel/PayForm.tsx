@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { startAurapay } from "@/lib/aurapay.functions";
+import { syncMyUpgrade } from "@/lib/ptero.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { errMsg, taka, useProfile, useSettings } from "@/lib/auth";
 import { Btn, Field, Input } from "./ui";
@@ -20,7 +21,7 @@ const methods: { id: Method; label: string; color: string }[] = [
 export function PayForm({
   userId, kind, amount, planId, serviceId, serverName, allowWallet = true, onDone,
 }: {
-  userId: string; kind: "new" | "renew" | "topup"; amount: number; planId?: string; serviceId?: string; serverName?: string; allowWallet?: boolean; onDone: () => void;
+  userId: string; kind: "new" | "renew" | "topup" | "upgrade"; amount: number; planId?: string; serviceId?: string; serverName?: string; allowWallet?: boolean; onDone: () => void;
 }) {
   const qc = useQueryClient();
   const { data: settings } = useSettings();
@@ -31,7 +32,7 @@ export function PayForm({
   const [busy, setBusy] = useState(false);
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
-  const canCoupon = kind !== "topup";
+  const canCoupon = kind === "new" || kind === "renew";
   const useCoupon = canCoupon && discount > 0 && method !== "wallet";
   const total = useCoupon ? Math.max(amount - discount, 1) : amount;
   const applyCoupon = async () => {
@@ -40,6 +41,7 @@ export function PayForm({
     setDiscount(Number(data)); toast.success(`Coupon applied: −${taka(Number(data))}`);
   };
   const aura = useServerFn(startAurapay);
+  const syncUp = useServerFn(syncMyUpgrade);
   const list = methods.filter((m) => (allowWallet || m.id !== "wallet") && (settings?.[`gw_${m.id}`] ?? "1") !== "0");
   if (list.length && !list.some((m) => m.id === method)) setMethod(list[0]!.id);
 
@@ -54,7 +56,10 @@ export function PayForm({
       if (method === "wallet") {
         const { error } = await supabase.rpc("pay_with_wallet", { _kind: kind, _plan_id: planId ?? null, _service_id: serviceId ?? null, _server_name: serverName ?? "" } as never);
         if (error) throw error;
-        toast.success("Paid from wallet. Your service is ready.");
+        if (kind === "upgrade" && serviceId) {
+          try { await syncUp({ data: { serviceId } }); } catch { /* admin can resync */ }
+          toast.success("Upgraded! Your server now has the new plan resources.");
+        } else toast.success("Paid from wallet. Your service is ready.");
       } else {
         if (trx.trim().length < 6) throw new Error("Enter a valid transaction ID");
         const { error } = await supabase.from("orders").insert({

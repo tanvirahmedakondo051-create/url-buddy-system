@@ -35,48 +35,54 @@ export const Route = createFileRoute("/")({
 
 const runtimes = ["Node.js", "Python", "Go", "Bun"];
 
+const iconStyles = {
+  brand: "bg-brand/20 border-brand/30 text-brand",
+  cyan: "bg-cyan/20 border-cyan/30 text-cyan",
+  mint: "bg-mint/20 border-mint/30 text-mint",
+} as const;
+
 const features = [
   {
     icon: Terminal,
     title: "Web Console & Logs",
     desc: "Tail live output in-browser, replay history, and debug without SSH.",
-    color: "brand",
+    color: "brand" as const,
   },
   {
     icon: KeyRound,
     title: "Env Variables Manager",
     desc: "Encrypted secrets, per-environment, editable without redeploying.",
-    color: "cyan",
+    color: "cyan" as const,
   },
   {
     icon: Network,
     title: "Custom Ports & Static IP",
     desc: "Expose any port, bind a static IP, and point your own domain.",
-    color: "mint",
+    color: "mint" as const,
   },
   {
     icon: FolderGit2,
     title: "File Manager + SFTP",
     desc: "Browse, edit, and sync files over SFTP or straight from the UI.",
-    color: "brand",
+    color: "brand" as const,
   },
   {
     icon: DatabaseBackup,
     title: "Automated Backups",
     desc: "Scheduled snapshots with one-click restore to any previous state.",
-    color: "cyan",
+    color: "cyan" as const,
   },
   {
     icon: Activity,
     title: "Resource Monitoring",
     desc: "Per-process CPU, RAM, and disk graphs with threshold alerts.",
-    color: "mint",
+    color: "mint" as const,
   },
   {
     icon: Github,
     title: "GitHub Integration",
     desc: "Push to main and watch it build, deploy, and restart automatically.",
-    color: "brand",
+    color: "brand" as const,
   },
 ];
 
@@ -199,7 +205,7 @@ function HomePage() {
               className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition hover:bg-white/[0.07]"
             >
               <div
-                className={`mb-4 grid size-10 place-items-center rounded-lg border bg-${f.color}/20 border-${f.color}/30 text-${f.color}`}
+                className={`mb-4 grid size-10 place-items-center rounded-lg border ${iconStyles[f.color]}`}
               >
                 <f.icon className="size-5" />
               </div>

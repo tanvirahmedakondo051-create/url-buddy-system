@@ -38,7 +38,9 @@ import { Route as AuthenticatedDashboardTicketsRouteImport } from './routes/_aut
 import { Route as AuthenticatedDashboardWalletRouteImport } from './routes/_authenticated/dashboard.wallet'
 import { Route as AuthenticatedAdminClientsIdRouteImport } from './routes/_authenticated/admin.clients.$id'
 import { Route as AuthenticatedAdminTicketsIdRouteImport } from './routes/_authenticated/admin.tickets.$id'
+import { Route as AuthenticatedDashboardPayReturnRouteImport } from './routes/_authenticated/dashboard.pay.return'
 import { Route as AuthenticatedDashboardTicketsIdRouteImport } from './routes/_authenticated/dashboard.tickets.$id'
+import { Route as ApiPublicAurapayWebhookRouteImport } from './routes/api/public/aurapay/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -199,12 +201,23 @@ const AuthenticatedAdminTicketsIdRoute =
     path: '/$id',
     getParentRoute: () => AuthenticatedAdminTicketsRoute,
   } as any)
+const AuthenticatedDashboardPayReturnRoute =
+  AuthenticatedDashboardPayReturnRouteImport.update({
+    id: '/pay/return',
+    path: '/pay/return',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardTicketsIdRoute =
   AuthenticatedDashboardTicketsIdRouteImport.update({
     id: '/$id',
     path: '/$id',
     getParentRoute: () => AuthenticatedDashboardTicketsRoute,
   } as any)
+const ApiPublicAurapayWebhookRoute = ApiPublicAurapayWebhookRouteImport.update({
+  id: '/api/public/aurapay/webhook',
+  path: '/api/public/aurapay/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -235,7 +248,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
   '/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/dashboard/pay/return': typeof AuthenticatedDashboardPayReturnRoute
   '/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
+  '/api/public/aurapay/webhook': typeof ApiPublicAurapayWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -264,7 +279,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
   '/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/dashboard/pay/return': typeof AuthenticatedDashboardPayReturnRoute
   '/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
+  '/api/public/aurapay/webhook': typeof ApiPublicAurapayWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -297,7 +314,9 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
   '/_authenticated/admin/tickets/$id': typeof AuthenticatedAdminTicketsIdRoute
+  '/_authenticated/dashboard/pay/return': typeof AuthenticatedDashboardPayReturnRoute
   '/_authenticated/dashboard/tickets/$id': typeof AuthenticatedDashboardTicketsIdRoute
+  '/api/public/aurapay/webhook': typeof ApiPublicAurapayWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -330,7 +349,9 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/admin/clients/$id'
     | '/admin/tickets/$id'
+    | '/dashboard/pay/return'
     | '/dashboard/tickets/$id'
+    | '/api/public/aurapay/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -359,7 +380,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/admin/clients/$id'
     | '/admin/tickets/$id'
+    | '/dashboard/pay/return'
     | '/dashboard/tickets/$id'
+    | '/api/public/aurapay/webhook'
   id:
     | '__root__'
     | '/'
@@ -391,7 +414,9 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/'
     | '/_authenticated/admin/clients/$id'
     | '/_authenticated/admin/tickets/$id'
+    | '/_authenticated/dashboard/pay/return'
     | '/_authenticated/dashboard/tickets/$id'
+    | '/api/public/aurapay/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -404,6 +429,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicAurapayWebhookRoute: typeof ApiPublicAurapayWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -611,12 +637,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTicketsIdRouteImport
       parentRoute: typeof AuthenticatedAdminTicketsRoute
     }
+    '/_authenticated/dashboard/pay/return': {
+      id: '/_authenticated/dashboard/pay/return'
+      path: '/pay/return'
+      fullPath: '/dashboard/pay/return'
+      preLoaderRoute: typeof AuthenticatedDashboardPayReturnRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/tickets/$id': {
       id: '/_authenticated/dashboard/tickets/$id'
       path: '/$id'
       fullPath: '/dashboard/tickets/$id'
       preLoaderRoute: typeof AuthenticatedDashboardTicketsIdRouteImport
       parentRoute: typeof AuthenticatedDashboardTicketsRoute
+    }
+    '/api/public/aurapay/webhook': {
+      id: '/api/public/aurapay/webhook'
+      path: '/api/public/aurapay/webhook'
+      fullPath: '/api/public/aurapay/webhook'
+      preLoaderRoute: typeof ApiPublicAurapayWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -698,6 +738,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardTicketsRoute: typeof AuthenticatedDashboardTicketsRouteWithChildren
   AuthenticatedDashboardWalletRoute: typeof AuthenticatedDashboardWalletRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardPayReturnRoute: typeof AuthenticatedDashboardPayReturnRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -710,6 +751,7 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
       AuthenticatedDashboardTicketsRouteWithChildren,
     AuthenticatedDashboardWalletRoute: AuthenticatedDashboardWalletRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardPayReturnRoute: AuthenticatedDashboardPayReturnRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
@@ -740,6 +782,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicAurapayWebhookRoute: ApiPublicAurapayWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

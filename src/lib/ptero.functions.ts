@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const input = z.object({
   serviceId: z.string().uuid(),
-  action: z.enum(["provision", "suspend", "unsuspend", "terminate"]),
+  action: z.enum(["provision", "suspend", "unsuspend", "terminate", "upgrade"]),
 });
 
 // Admin-only: syncs a service with the Pterodactyl panel and updates its status.
@@ -51,4 +51,16 @@ export const pteroTest = createServerFn({ method: "POST" })
     } catch (e) {
       return { ok: false as const, message: e instanceof Error && !/fetch/i.test(e.message) ? e.message : "Could not reach the panel. Check the URL." };
     }
+  });
+
+// Customer: after a wallet upgrade, push the new plan limits to their own server.
+export const syncMyUpgrade = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ serviceId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: s } = await supabaseAdmin.from("services").select("user_id").eq("id", data.serviceId).maybeSingle();
+    if (s?.user_id !== context.userId) throw new Error("Invalid service");
+    const { runPtero } = await import("./ptero.server");
+    return runPtero(supabaseAdmin, data.serviceId, "upgrade", null);
   });

@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.upgrade_diff(uuid,uuid,uuid) FROM authenticated;

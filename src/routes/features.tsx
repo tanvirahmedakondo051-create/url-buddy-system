@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import artServer from "@/assets/art-server.png";
+import artShield from "@/assets/art-shield.png";
 import {
   Terminal,
   KeyRound,
@@ -125,7 +127,11 @@ const features = [
 
 function FeaturesPage() {
   return (
-    <main className="mx-auto max-w-6xl px-5 py-14">
+    <main className="relative mx-auto max-w-6xl px-5 py-14">
+      <div className="pointer-events-none absolute right-5 top-10 hidden gap-4 md:flex">
+        <img src={artServer} alt="" width={816} height={816} className="art-float w-32" />
+        <img src={artShield} alt="" width={816} height={816} className="art-float w-24 [animation-delay:2s]" />
+      </div>
       <div className="max-w-2xl">
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-md">
           <span className="size-1.5 animate-pulse rounded-full bg-mint" />

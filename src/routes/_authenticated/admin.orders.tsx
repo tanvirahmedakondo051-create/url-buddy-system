@@ -33,9 +33,9 @@ function Orders() {
       const { data: sid, error } = await supabase.rpc("approve_order", { _order_id: id });
       if (error) throw error;
       toast.success("Payment approved");
-      if (kind === "new" && sid) {
+      if ((kind === "new" || kind === "upgrade") && sid) {
         try {
-          const r = await ptero({ data: { serviceId: sid as string, action: "provision" } });
+          const r = await ptero({ data: { serviceId: sid as string, action: kind === "new" ? "provision" : "upgrade" } });
           toast.message(r.message);
         } catch (e) {
           toast.warning("Approved, but server not created: " + errMsg(e));

@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { getSignupMode, signupNoVerify } from "@/lib/signup.functions";
 import { AuthCard, Divider, GoogleButton } from "@/components/AuthCard";
 import { Btn, Field, Input } from "@/components/panel/ui";
 
@@ -26,6 +28,8 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const noVerify = useServerFn(signupNoVerify);
+  const mode = useServerFn(getSignupMode);
 
   if (sent)
     return (
@@ -47,6 +51,19 @@ function RegisterPage() {
           e.preventDefault();
           if (password.length < 8) return toast.error("Password must be at least 8 characters");
           setBusy(true);
+          try {
+            const { verify } = await mode();
+            if (!verify) {
+              await noVerify({ data: { email, password, name } });
+              const { error: e2 } = await supabase.auth.signInWithPassword({ email, password });
+              setBusy(false);
+              if (e2) return toast.error(e2.message);
+              return navigate({ to: "/dashboard" });
+            }
+          } catch (err) {
+            setBusy(false);
+            return toast.error(err instanceof Error ? err.message : "Sign up failed");
+          }
           const { data, error } = await supabase.auth.signUp({
             email,
             password,

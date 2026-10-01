@@ -75,8 +75,8 @@ function SettingsPage() {
     if (v["ptero_environment"]) {
       try { JSON.parse(v["ptero_environment"]); } catch { return toast.error("Environment must be valid JSON"); }
     }
-    const keys = ["logo_url", "favicon_url", ...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key)];
-    const rows = keys.map((k) => ({ key: k, value: v[k] ?? "" }));
+    const keys = ["logo_url", "favicon_url", ...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key), "email_verification"];
+    const rows = keys.map((k) => ({ key: k, value: v[k] ?? (k === "email_verification" ? "1" : "") }));
     const { error } = await supabase.from("settings").upsert(rows);
     if (error) return toast.error(error.message);
     for (const [k, val] of Object.entries(sv)) {
@@ -118,6 +118,14 @@ function SettingsPage() {
               </Field>
             ))}
           </div>
+        </Panel>
+
+        <Panel className="p-6">
+          <h2 className="mb-1 font-display font-semibold text-white">Email</h2>
+          <p className="mb-4 text-sm text-slate-400">When on, new customers must click the link in their email before they can sign in.</p>
+          <label className="flex items-center gap-2 text-sm text-slate-300">
+            <input type="checkbox" checked={(v["email_verification"] ?? "1") === "1"} onChange={(e) => setV({ ...v, email_verification: e.target.checked ? "1" : "0" })} /> Require email verification on signup
+          </label>
         </Panel>
 
         <Panel className="p-6">

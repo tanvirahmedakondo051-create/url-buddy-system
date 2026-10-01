@@ -62,6 +62,24 @@ export type Database = {
         }
         Relationships: []
       }
+      gateway_secrets: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           admin_note: string | null
@@ -141,6 +159,7 @@ export type Database = {
       plans: {
         Row: {
           active: boolean
+          archived: boolean
           cpu_pct: number
           created_at: string
           disk_gb: number
@@ -156,6 +175,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          archived?: boolean
           cpu_pct: number
           created_at?: string
           disk_gb: number
@@ -171,6 +191,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          archived?: boolean
           cpu_pct?: number
           created_at?: string
           disk_gb?: number
@@ -420,6 +441,7 @@ export type Database = {
         Args: { _amount: number; _note: string; _user_id: string }
         Returns: undefined
       }
+      admin_delete_plan: { Args: { _plan_id: string }; Returns: string }
       admin_set_service: {
         Args: { _due: string; _service_id: string; _status: string }
         Returns: undefined
@@ -432,6 +454,13 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_gateway_secrets: {
+        Args: never
+        Returns: {
+          key: string
+          updated_at: string
+        }[]
+      }
       pay_with_wallet: {
         Args: {
           _kind: string
@@ -443,6 +472,10 @@ export type Database = {
       }
       reject_order: {
         Args: { _note: string; _order_id: string }
+        Returns: undefined
+      }
+      set_gateway_secret: {
+        Args: { _key: string; _value: string }
         Returns: undefined
       }
       suspend_overdue: { Args: never; Returns: number }

@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({ component: Orders });
 
-const tabs = ["pending", "approved", "rejected", "all"] as const;
+const tabs = ["pending", "approved", "rejected", "refunded", "all"] as const;
 
 function Orders() {
   const qc = useQueryClient();
@@ -58,6 +58,13 @@ function Orders() {
     qc.invalidateQueries();
   };
 
+  const refund = async (id: string, no: number) => {
+    if (!confirm(`Refund invoice #${no} to the client's wallet?`)) return;
+    const { error } = await supabase.rpc("admin_refund_order" as never, { _order_id: id } as never);
+    if (error) return toast.error(errMsg(error));
+    toast.success("Refunded to wallet"); qc.invalidateQueries();
+  };
+
   return (
     <>
       <PageHeader title="Orders & payments" sub="Check the transaction ID in your bKash/Nagad/Rocket app, then approve." />
@@ -74,10 +81,10 @@ function Orders() {
               <Td className="font-mono text-white">#{o.invoice_no}</Td>
               <Td>{fmtDate(o.created_at)}</Td>
               <Td>{c ? <Link to="/admin/clients/$id" params={{ id: c.id }} className="text-cyan hover:underline">{c.full_name || c.email}</Link> : "—"}</Td>
-              <Td className="capitalize">{o.kind}{o.plans ? ` · ${(o.plans as { name: string }).name}` : ""}</Td>
+              <Td className="capitalize">{o.description || o.kind}{o.plans ? ` · ${(o.plans as { name: string }).name}` : ""}</Td>
               <Td className="capitalize">{o.method}</Td>
               <Td className="font-mono text-xs">{o.trx_id ?? "—"}{o.sender && <span className="block text-slate-500">{o.sender}</span>}</Td>
-              <Td className="font-mono">{taka(o.amount)}</Td>
+              <Td className="font-mono">{taka(o.amount)}{Number(o.discount) > 0 && <span className="block text-[10px] text-mint">−{taka(o.discount)} {o.coupon_code}</span>}</Td>
               <Td><StatusBadge status={o.status} /></Td>
               <Td>
                 {o.status === "pending" && (
@@ -85,6 +92,9 @@ function Orders() {
                     <Btn className="px-3 py-1 text-xs" disabled={busy === o.id} onClick={() => approve(o.id, o.kind)}>Approve</Btn>
                     <Btn variant="danger" className="px-3 py-1 text-xs" onClick={() => reject(o.id)}>Reject</Btn>
                   </div>
+                )}
+                {o.status === "approved" && o.method !== "wallet" && (
+                  <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => refund(o.id, o.invoice_no)}>Refund to wallet</Btn>
                 )}
               </Td>
             </tr>

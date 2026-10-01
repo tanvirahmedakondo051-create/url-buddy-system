@@ -4,6 +4,7 @@ import { Megaphone, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fmtDate, taka, useProfile } from "@/lib/auth";
 import { PageHeader, Panel, Stat, StatusBadge, Btn } from "@/components/panel/ui";
+import { PanelAccessCard, QuickCards } from "@/components/panel/HomeCards";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({ component: Overview });
 
@@ -39,6 +40,11 @@ function Overview() {
           <Link to="/dashboard/services" className="ml-auto font-semibold underline">Renew</Link>
         </Panel>
       )}
+      <p className="mb-4 inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-400">Member since {fmtDate(profile?.created_at)}</p>
+      <div className="mb-6 grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-4"><QuickCards /></div>
+        <div className="lg:col-span-2"><PanelAccessCard /></div>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="Active services" value={services.filter((s) => s.status === "active").length} tone="mint" />
         <Stat label="Wallet balance" value={taka(profile?.balance)} tone="cyan" />

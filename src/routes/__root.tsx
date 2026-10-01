@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
+import { useSettings } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -123,6 +124,18 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function BrandFavicon() {
+  const { data } = useSettings();
+  useEffect(() => {
+    const href = data?.["favicon_url"];
+    if (!href) return;
+    let link = document.querySelector<HTMLLinkElement>("link[rel='icon']");
+    if (!link) { link = document.createElement("link"); link.rel = "icon"; document.head.appendChild(link); }
+    link.href = href;
+  }, [data]);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
@@ -152,6 +165,7 @@ function RootComponent() {
           {!isPanel && <SiteHeader />}
           <Outlet />
           {!isPanel && <SiteFooter />}
+          <BrandFavicon />
         </div>
       </div>
       <Toaster theme="dark" position="top-right" richColors />

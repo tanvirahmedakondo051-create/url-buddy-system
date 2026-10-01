@@ -9,6 +9,7 @@ const startInput = z.object({
   serviceId: z.string().uuid().optional(),
   serverName: z.string().max(60).optional(),
   amount: z.number().positive().max(100000).optional(),
+  coupon: z.string().max(40).optional(),
 });
 
 // Creates a pending AuraPay invoice and returns the AuraPay payment page.
@@ -27,7 +28,7 @@ export const startAurapay = createServerFn({ method: "POST" })
     }
     const { data: order, error } = await supabaseAdmin.from("orders").insert({
       user_id: context.userId, kind: data.kind, plan_id: data.planId ?? null, service_id: data.serviceId ?? null,
-      server_name: data.serverName ?? null, amount: data.kind === "topup" ? data.amount! : 1, method: "aurapay",
+      server_name: data.serverName ?? null, amount: data.kind === "topup" ? data.amount! : 1, method: "aurapay", coupon_code: data.kind === "topup" ? null : data.coupon || null,
     }).select("id, amount").single();
     if (error || !order) throw new Error(error?.message ?? "Could not create invoice");
     const { data: prof } = await supabaseAdmin.from("profiles").select("full_name,email").eq("id", context.userId).single();

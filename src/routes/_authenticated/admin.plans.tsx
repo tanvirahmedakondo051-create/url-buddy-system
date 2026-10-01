@@ -8,7 +8,7 @@ import { Btn, Field, Input, PageHeader, Panel, Select, StatusBadge, Table, Td } 
 
 export const Route = createFileRoute("/_authenticated/admin/plans")({ component: Plans });
 
-type Form = { id?: string; name: string; tier: string; price: number; ram_mb: number; disk_gb: number; cpu_pct: number; features: string; featured: boolean; active: boolean; sort: number; egg_id: string };
+type Form = { id?: string | undefined; name: string; tier: string; price: number; ram_mb: number; disk_gb: number; cpu_pct: number; features: string; featured: boolean; active: boolean; sort: number; egg_id: string };
 const blank: Form = { name: "", tier: "Mini", price: 100, ram_mb: 512, disk_gb: 2, cpu_pct: 50, features: "", featured: false, active: true, sort: 99, egg_id: "" };
 
 function Plans() {

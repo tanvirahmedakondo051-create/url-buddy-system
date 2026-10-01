@@ -75,8 +75,8 @@ function SettingsPage() {
     if (v["ptero_environment"]) {
       try { JSON.parse(v["ptero_environment"]); } catch { return toast.error("Environment must be valid JSON"); }
     }
-    const keys = ["logo_url", "favicon_url", ...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key)];
-    const rows = keys.map((k) => ({ key: k, value: v[k] ?? "" }));
+    const keys = ["logo_url", "favicon_url", ...sections.flatMap((s) => s.fields.map((f) => f.key)), ...gateways.map((g) => g.key), "email_verification"];
+    const rows = keys.map((k) => ({ key: k, value: v[k] ?? (k === "email_verification" ? "1" : "") }));
     const { error } = await supabase.from("settings").upsert(rows);
     if (error) return toast.error(error.message);
     for (const [k, val] of Object.entries(sv)) {

@@ -30,6 +30,14 @@ function Plans() {
 
   const num = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement>) => f && setF({ ...f, [k]: Number(e.target.value) });
 
+  const del = async (id: string, name: string) => {
+    if (!confirm(`Delete plan "${name}"? If customers use it, it will be hidden instead.`)) return;
+    const { data: r, error } = await supabase.rpc("admin_delete_plan" as never, { _plan_id: id } as never);
+    if (error) return toast.error(error.message);
+    toast.success(r === "deleted" ? "Plan deleted" : "Plan is in use, so it was hidden from ordering");
+    qc.invalidateQueries();
+  };
+
   return (
     <>
       <PageHeader title="Products / plans" sub="Prices and resources customers can order." action={<Btn onClick={() => setF({ ...blank })}>Add plan</Btn>} />
@@ -60,7 +68,13 @@ function Plans() {
             <Td className="font-mono">{taka(p.price)}</Td>
             <Td>{p.ram_mb} MB</Td><Td>{p.disk_gb} GB</Td><Td>{p.cpu_pct}%</Td><Td>{p.egg_id ?? "—"}</Td>
             <Td><StatusBadge status={p.active ? "active" : "closed"} /></Td>
-            <Td><Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Edit</Btn></Td>
+            <Td>
+              <div className="flex gap-2">
+                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Edit</Btn>
+                <Btn variant="ghost" className="px-3 py-1 text-xs" onClick={() => setF({ ...p, id: undefined, name: p.name + " copy", price: Number(p.price), features: p.features.join(", "), egg_id: p.egg_id?.toString() ?? "" })}>Copy</Btn>
+                <Btn variant="ghost" className="px-3 py-1 text-xs text-rose-300" onClick={() => del(p.id, p.name)}>Delete</Btn>
+              </div>
+            </Td>
           </tr>
         ))}
       </Table>

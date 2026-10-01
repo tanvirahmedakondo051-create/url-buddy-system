@@ -26,7 +26,8 @@ export function PayForm({
   const [trx, setTrx] = useState("");
   const [sender, setSender] = useState("");
   const [busy, setBusy] = useState(false);
-  const list = methods.filter((m) => allowWallet || m.id !== "wallet");
+  const list = methods.filter((m) => (allowWallet || m.id !== "wallet") && (settings?.[`gw_${m.id}`] ?? "1") !== "0");
+  if (list.length && !list.some((m) => m.id === method)) setMethod(list[0]!.id);
 
   const submit = async () => {
     setBusy(true);

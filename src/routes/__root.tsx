@@ -91,7 +91,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Deploy Telegram & Discord bots, websites, and apps in seconds. BDT payments via bKash, Nagad, Rocket. Plans from ৳100/mo.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Hexa Hoster" },
+      { property: "og:image", content: "https://hexahoster.xyz/og-image.jpg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "Hexa Hoster — Get your bot online in seconds" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://hexahoster.xyz/og-image.jpg" },
+      { name: "theme-color", content: "#070a14" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Hexa Hoster",
+          url: "https://hexahoster.xyz/",
+          logo: "https://hexahoster.xyz/og-image.jpg",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Hexa Hoster",
+          url: "https://hexahoster.xyz/",
+        }),
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

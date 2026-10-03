@@ -15,8 +15,10 @@ export const Route = createFileRoute("/register")({
       { property: "og:title", content: "Create account — Hexa Hoster" },
       { property: "og:description", content: "Create your Hexa Hoster account and deploy in seconds." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/register" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/register" }],
   }),
   component: RegisterPage,
 });

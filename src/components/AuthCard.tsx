@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { toast } from "sonner";
-import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/integrations/supabase/client";
 
 export function GoogleIcon() {
   return (
@@ -18,10 +18,11 @@ export function GoogleButton({ onDone }: { onDone: () => void }) {
     <button
       type="button"
       onClick={async () => {
-        const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/login" });
-        if (r.error) return toast.error(r.error.message ?? "Google sign-in failed");
-        if (r.redirected) return;
-        onDone();
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: { redirectTo: window.location.origin + "/login" },
+        });
+        if (error) toast.error(error.message ?? "Google sign-in failed");
       }}
       className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/10"
     >

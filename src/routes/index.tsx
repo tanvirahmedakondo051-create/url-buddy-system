@@ -31,8 +31,10 @@ export const Route = createFileRoute("/")({
           "Deploy Telegram & Discord bots, websites, and apps in seconds. BDT payments. Plans from ৳100/mo.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/" }],
   }),
   component: HomePage,
 });

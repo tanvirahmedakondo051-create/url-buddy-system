@@ -15,7 +15,40 @@ export const Route = createFileRoute("/faq")({
         content: "Activation, payments, refunds, runtimes — everything about Hexa Hoster hosting.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/faq" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/faq" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "How fast is activation?",
+              acceptedAnswer: { "@type": "Answer", text: "Instantly. As soon as your payment is confirmed, your server is provisioned and you can deploy within 60 seconds." },
+            },
+            {
+              "@type": "Question",
+              name: "Do servers sleep when idle?",
+              acceptedAnswer: { "@type": "Answer", text: "Never. Your container runs 24/7 regardless of traffic — no suspension or throttling of idle bots." },
+            },
+            {
+              "@type": "Question",
+              name: "What payment methods do you accept?",
+              acceptedAnswer: { "@type": "Answer", text: "We accept bKash, Nagad, and Rocket — all billed in BDT." },
+            },
+            {
+              "@type": "Question",
+              name: "What runtimes are supported?",
+              acceptedAnswer: { "@type": "Answer", text: "Node.js, Python, Go, and Bun are first-class runtimes with auto-detection." },
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: FaqPage,

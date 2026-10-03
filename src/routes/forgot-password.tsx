@@ -13,8 +13,10 @@ export const Route = createFileRoute("/forgot-password")({
       { property: "og:title", content: "Reset password — Hexa Hoster" },
       { property: "og:description", content: "Reset your Hexa Hoster account password." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/forgot-password" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/forgot-password" }],
   }),
   component: Forgot,
 });

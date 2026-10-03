@@ -26,8 +26,10 @@ export const Route = createFileRoute("/features")({
         content: "Databases, files, backups, monitoring — everything your bot needs in one dashboard.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/features" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/features" }],
   }),
   component: FeaturesPage,
 });

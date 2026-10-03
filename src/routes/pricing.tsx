@@ -17,8 +17,10 @@ export const Route = createFileRoute("/pricing")({
         content: "8 hosting plans from ৳100 to ৳850/mo. Pay with bKash, Nagad, or Rocket.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/pricing" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/pricing" }],
   }),
   component: PricingPage,
 });

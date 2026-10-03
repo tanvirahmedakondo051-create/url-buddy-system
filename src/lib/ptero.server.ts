@@ -42,7 +42,7 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
 
   if (data.action === "provision") {
     if (svc.ptero_server_id) throw new Error("Already created on the game panel");
-    const plan = svc.plans as { ram_mb: number; disk_gb: number; disk_mb?: number; cpu_pct: number; egg_id: number | null } | null;
+    const plan = svc.plans as { ram_mb: number; disk_gb: number; disk_mb?: number; cpu_pct: number; egg_id: number | null; docker_image: string | null; startup: string | null; environment: string | null } | null;
     const prof = svc.profiles as { email: string | null; full_name: string | null } | null;
     if (!plan || !prof?.email) throw new Error("Missing plan or customer email");
     if (!plan.egg_id) throw new Error("Set an egg ID on this plan first (Admin → Plans)");
@@ -51,15 +51,15 @@ export async function runPtero(supabaseAdmin: SupabaseClient<Database>, serviceI
     if (!acc) throw new Error("Game panel is not connected");
     const pteroUser = acc.id;
     let env: Record<string, string> = {};
-    try { env = JSON.parse(s["ptero_environment"] || "{}"); } catch { /* keep empty */ }
+    try { env = JSON.parse(plan.environment || s["ptero_environment"] || "{}"); } catch { /* keep empty */ }
     const server = await api("/servers", {
       method: "POST",
       body: JSON.stringify({
         name: svc.name,
         user: pteroUser,
         egg: plan.egg_id,
-        docker_image: s["ptero_docker_image"],
-        startup: s["ptero_startup"],
+        docker_image: plan.docker_image || s["ptero_docker_image"],
+        startup: plan.startup || s["ptero_startup"],
         environment: env,
         limits: { memory: plan.ram_mb, swap: 0, disk: plan.disk_mb ?? plan.disk_gb * 1024, io: 500, cpu: plan.cpu_pct },
         feature_limits: { databases: 1, backups: 2, allocations: 1 },

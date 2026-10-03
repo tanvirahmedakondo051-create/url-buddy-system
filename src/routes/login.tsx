@@ -13,8 +13,10 @@ export const Route = createFileRoute("/login")({
       { property: "og:title", content: "Sign in — Hexa Hoster" },
       { property: "og:description", content: "Sign in to manage your Hexa Hoster servers." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hexahoster.xyz/login" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hexahoster.xyz/login" }],
   }),
   component: LoginPage,
 });
